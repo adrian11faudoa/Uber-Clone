@@ -1,2442 +1,1999 @@
-You are operating in Senior Engineering Team Mode.
-
-Design the complete foundational architecture for an enterprise-scale global ride-hailing, mobility, transportation, and delivery platform comparable in architectural scope to Uber.
-
-The platform is an original implementation.
-
-Do not copy proprietary source code, internal architecture, branding, confidential implementation details, proprietary algorithms, or private implementation details from Uber or any other company.
-
-This prompt is completely independent and may be executed in a separate conversation.
-
-This is an ARCHITECTURE PHASE.
-
-Do not implement backend code.
-
-Do not implement frontend code.
-
-Do not implement mobile code.
-
-Do not generate infrastructure implementation files.
-
-Do not generate Dockerfiles.
-
-Do not generate Kubernetes manifests.
-
-Do not generate Terraform files.
-
-Do not generate application source code.
-
-Produce architecture, specifications, contracts, diagrams, schemas, ownership rules, engineering decisions, and implementation guidance only.
-
-────────────────────────────────────────
-
-PROJECT
-
-Build a production-ready global mobility platform supporting:
-
-• Riders
-• Drivers
-• Driver onboarding
-• Driver verification
-• Vehicle management
-• Vehicle categories
-• Driver availability
-• Real-time driver location
-• Ride requests
-• Driver matching
-• Dispatch
-• Fare estimation
-• Dynamic pricing
-• Surge pricing
-• One-to-one rides
-• Multi-stop rides
-• Scheduled rides
-• Airport trips
-• Shared rides where supported
-• Trip tracking
-• Navigation integration
-• Payments
-• Cash payments where supported
-• Wallets
-• Promotions
-• Coupons
-• Refunds
-• Driver earnings
-• Driver incentives
-• Driver payouts
-• Ratings
-• Reviews
-• Rider-driver messaging
-• Push notifications
-• Safety systems
-• Trip sharing
-• Emergency assistance boundaries
-• Fraud prevention
-• Abuse prevention
-• Blocking
-• Reporting
-• Support
-• Business accounts
-• Business rides
-• Receipts
-• Tax-related metadata
-• Analytics
-• Administration
-• Moderation
-• High availability
-• Multi-region deployment
-• Disaster recovery
-• Horizontal scalability
+# UBER-STYLE RIDE-HAILING PLATFORM — ARCHITECTURE PROMPT — VOLUME 1
+
+## ROLE
 
-The platform must be designed for:
+You are the senior architecture organization responsible for defining the production architecture of a globally scalable ride-hailing and mobility marketplace comparable in product depth and operational sophistication to Uber.
 
-• Very low dispatch latency
-• Massive location-update throughput
-• Large concurrent trip volumes
-• Strong financial correctness
-• Strong trip-state correctness
-• Global operation
-• Regional routing
-• Fault tolerance
+Operate as a coordinated team consisting of:
 
-────────────────────────────────────────
-
-PRIMARY TECHNOLOGY STACK
-
-WEB
-
-• Next.js
-• React
-• TypeScript
-• Tailwind CSS
-• shadcn/ui
-• TanStack Query
-• Zustand
-
-MOBILE
-
-• React Native
-• Expo
-• TypeScript
-
-BACKEND
-
-• Node.js
-• NestJS
-• TypeScript
-
-DATABASE
-
-• PostgreSQL
-• Prisma ORM
-• PostGIS
-
-CACHE / EPHEMERAL STATE
-
-• Redis
-
-EVENT STREAMING
-
-• Kafka or Redpanda
-
-BACKGROUND PROCESSING
-
-• BullMQ
-
-REAL-TIME
-
-• WebSockets
-• Socket.IO where appropriate
-
-MAPS / GEOSPATIAL
-
-• Google Maps Platform or approved mapping abstraction
-• Geocoding
-• Reverse geocoding
-• Routes
-• ETA
-• Places
-• Geofencing where appropriate
-
-PAYMENTS
-
-• Stripe or approved payment abstraction
-
-PUSH NOTIFICATIONS
-
-• Firebase Cloud Messaging
-• Apple Push Notification Service
-
-OBJECT STORAGE
-
-• AWS S3-compatible object storage
-
-CDN
-
-• CloudFront or equivalent CDN
-
-INFRASTRUCTURE
-
-• Docker
-• Kubernetes
-• Helm
-• Terraform
-• GitHub Actions
-
-OBSERVABILITY
-
-• OpenTelemetry
-• Prometheus
-• Grafana
-• Loki
-• Tempo
-
-SECRETS
-
-• AWS Secrets Manager
-• HashiCorp Vault or approved cloud-native secret management
-
-────────────────────────────────────────
-
-ARCHITECTURAL APPROACH
-
-Determine the appropriate architecture between:
-
-• Modular Monolith
-• Service-Oriented Architecture
-• Microservices
-
-Do not blindly create a microservice for every domain.
-
-Evaluate:
-
-• Dispatch latency
-• Location-update scale
-• Geospatial workloads
-• Trip consistency
-• Financial consistency
-• Driver availability
-• Real-time communication
-• Failure isolation
-• Operational complexity
-• Deployment independence
-• Cost
-• Team ownership
-• Global deployment
-
-Clearly identify:
-
-• Independently deployable services
-• Shared transactional boundaries
-• Authoritative data ownership
-• Synchronous communication
-• Asynchronous communication
-• Event-driven communication
-• Real-time communication
-• Read models
-• CQRS requirements
-• Strong consistency boundaries
-• Eventual consistency boundaries
-
-Provide a future service-extraction strategy.
-
-────────────────────────────────────────
-
-DOMAIN DECOMPOSITION
-
-Define bounded contexts for:
-
-Identity
-
-Accounts
-
-Profiles
-
-Authentication
-
-Authorization
-
-Sessions
-
-Devices
-
-Riders
-
-Drivers
-
-Driver Onboarding
-
-Driver Verification
-
-Driver Documents
-
-Vehicles
-
-Vehicle Verification
-
-Vehicle Categories
-
-Driver Availability
-
-Location
-
-Geospatial
-
-Geofencing
-
-Maps
-
-Routing
-
-ETA
-
-Ride Requests
-
-Dispatch
-
-Matching
-
-Driver Offers
-
-Trip Lifecycle
-
-Trip Stops
-
-Scheduled Rides
-
-Shared Rides
-
-Fare Estimation
-
-Pricing
-
-Surge
-
-Promotions
-
-Coupons
-
-Payments
-
-Wallet
-
-Refunds
-
-Driver Earnings
-
-Driver Incentives
-
-Driver Payouts
-
-Ratings
-
-Reviews
-
-Messaging
-
-Notifications
-
-Safety
-
-Trip Sharing
-
-Emergency Assistance
-
-Fraud
-
-Risk
-
-Blocking
-
-Reporting
-
-Support
-
-Business Accounts
-
-Business Trips
-
-Business Billing
-
-Receipts
-
-Taxes
-
-Analytics
-
-Administration
-
-Moderation
-
-Audit
-
-Feature Flags
-
-System Configuration
-
-For every bounded context define:
-
-• Responsibility
-• Aggregate roots
-• Entities
-• Value objects
-• Domain services
-• Repositories
-• Domain events
-• Data ownership
-• Consistency model
-• Scaling requirements
-• Security boundaries
-
-────────────────────────────────────────
-
-SERVICE DECOMPOSITION
-
-Evaluate appropriate services for:
-
-API Gateway
-
-Authentication Service
-
-Identity Service
-
-Account Service
-
-Profile Service
-
-Session Service
-
-Device Service
-
-Rider Service
-
-Driver Service
-
-Driver Onboarding Service
-
-Driver Verification Service
-
-Vehicle Service
-
-Vehicle Verification Service
-
-Availability Service
-
-Location Service
-
-Geospatial Service
-
-Map Integration Service
-
-Routing Service
-
-ETA Service
-
-Ride Request Service
-
-Dispatch Service
-
-Matching Service
-
-Driver Offer Service
-
-Trip Service
-
-Scheduled Ride Service
-
-Shared Ride Service
-
-Fare Service
-
-Pricing Service
-
-Surge Service
-
-Promotion Service
-
-Coupon Service
-
-Payment Service
-
-Wallet Service
-
-Refund Service
-
-Earnings Service
-
-Incentive Service
-
-Payout Service
-
-Rating Service
-
-Review Service
-
-Messaging Service
-
-Notification Service
-
-Safety Service
-
-Trip Sharing Service
-
-Fraud Service
-
-Risk Service
-
-Blocking Service
-
-Reporting Service
-
-Support Service
-
-Business Account Service
-
-Business Trip Service
-
-Receipt Service
-
-Analytics Service
-
-Administration Service
-
-Moderation Service
-
-Audit Service
-
-Feature Flag Service
-
-Configuration Service
-
-Do not create unnecessary services.
-
-Combine tightly coupled responsibilities where justified by:
-
-• Transactional consistency
-• Latency
-• Operational complexity
-• Ownership
-
-For every final service define:
-
-• Responsibility
-• Owned data
-• APIs
-• Events produced
-• Events consumed
-• Synchronous dependencies
-• Asynchronous dependencies
-• Scaling
-• Availability
-• Security
-
-────────────────────────────────────────
-
-SERVICE OWNERSHIP MATRIX
-
-Create a complete ownership matrix identifying:
-
-• Authoritative service
-• Database owner
-• Cache owner
-• Event owner
-• Read-model owner
-• Search owner
-• Administrative owner
-
-Explicitly prohibit direct writes to another domain's authoritative database.
-
-────────────────────────────────────────
-
-COMMUNICATION MATRIX
-
-For major service interactions define:
-
-• Producer
-• Consumer
-• Protocol
-• Purpose
-• Direction
-• Sync/async
-• Timeout
-• Retry
-• Idempotency
-• Consistency
-• Failure behavior
-
-Evaluate:
-
-• REST
-• Kafka/Redpanda
-• BullMQ
-• Redis
-• WebSockets
-• Server-Sent Events where useful
-
-Avoid unnecessary synchronous dependency chains.
-
-────────────────────────────────────────
-
-SYSTEM ARCHITECTURE
-
-Generate text-based diagrams for:
-
-CLIENT LAYER
-
-• Rider web
-• Rider mobile
-• Driver web
-• Driver mobile
-• Administration
-
-EDGE LAYER
-
-• DNS
-• CDN
-• WAF
-• Load balancer
-• API gateway
-• WebSocket gateway
-
-APPLICATION LAYER
-
-• Rider APIs
-• Driver APIs
-• Dispatch
-• Matching
-• Trip management
-• Pricing
-• Payment
-• Notification
-• Support
-• Administration
-
-REAL-TIME LAYER
-
-• Driver location
-• Ride status
-• Dispatch offers
-• Rider tracking
-• Messaging
-
-DATA LAYER
-
-• PostgreSQL
-• PostGIS
-• Redis
-• Kafka
-• Object storage
-• Search where appropriate
-
-INTEGRATION LAYER
-
-• Maps provider
-• Payment provider
-• Push providers
-• Verification providers
-
-OBSERVABILITY LAYER
-
-• Metrics
-• Logs
-• Traces
-• Alerts
-
-SECURITY LAYER
-
-• Authentication
-• Authorization
-• IAM
-• Secrets
-• Encryption
-• Audit
-
-Do not use images.
-
-────────────────────────────────────────
-
-MONOREPO ARCHITECTURE
-
-Design a production-ready monorepo containing:
-
-APPLICATIONS
-
-• Rider Web
-• Rider Mobile
-• Driver Web
-• Driver Mobile
-• Admin Dashboard
-
-BACKEND
-
-• API Gateway
-• Domain services
-• Real-time services
-• Dispatch services
-• Matching services
-• Workers
-• Event consumers
-
-SHARED PACKAGES
-
-• API contracts
-• Event contracts
-• Shared types
-• Validation
-• Configuration
-• Authentication
-• Authorization
-• Geospatial interfaces
-• Maps interfaces
-• Payment interfaces
-• Observability
-• Testing utilities
-
-INFRASTRUCTURE
-
-• Docker
-• Kubernetes
-• Helm
-• Terraform
-• CI/CD
-
-DOCUMENTATION
-
-• Architecture
-• APIs
-• Events
-• Database
-• Dispatch
-• Maps
-• Security
-• Operations
-• ADRs
-• Runbooks
-
-Do not create uncontrolled shared packages.
-
-────────────────────────────────────────
-
-FOLDER HIERARCHY
-
-Generate a detailed production-ready hierarchy for:
-
-• Monorepo root
-• Rider web
-• Driver web
-• Rider mobile
-• Driver mobile
-• Admin
-• API gateway
-• Backend services
-• Dispatch
-• Matching
-• Real-time systems
-• Workers
-• Shared packages
-• Database
-• Infrastructure
-• Tests
-• Documentation
-• Migrations
-• Configuration
-
-The hierarchy must be consistent with future implementation prompts.
-
-────────────────────────────────────────
-
-CORE DOMAIN MODEL
-
-Evaluate and define:
-
-User
-
-Account
-
-Profile
-
-Session
-
-Device
-
-Rider
-
-Driver
-
-DriverDocument
-
-DriverVerification
-
-Vehicle
-
-VehicleCategory
-
-VehicleVerification
-
-DriverAvailability
-
-DriverLocationReference
-
-ServiceArea
-
-Geofence
-
-RideRequest
-
-RideRequestStop
-
-DriverOffer
-
-Trip
-
-TripStop
-
-TripParticipant
-
-TripStateTransition
-
-ScheduledRide
-
-SharedRide
-
-FareEstimate
-
-Fare
-
-FareComponent
-
-PricingRule
-
-SurgeZone
-
-Promotion
-
-Coupon
-
-Payment
-
-PaymentAttempt
-
-Refund
-
-Wallet
-
-WalletTransaction
-
-DriverEarning
-
-DriverIncentive
-
-DriverPayout
-
-Rating
-
-Review
-
-Conversation
-
-Message
-
-Notification
-
-SafetyIncident
-
-TripShare
-
-BlockedEntity
-
-Report
-
-SupportCase
-
-BusinessAccount
-
-BusinessMember
-
-BusinessTrip
-
-Receipt
-
-TaxRecord
-
-AuditLog
-
-FeatureFlag
-
-SystemConfiguration
-
-Do not force every conceptual entity into a separate table.
-
-Use aggregates and normalized relational structures appropriately.
-
-────────────────────────────────────────
-
-TRIP AGGREGATE
-
-Define the Trip aggregate and exact ownership of:
-
-• Rider
-• Driver
-• Vehicle
-• Pickup
-• Dropoff
-• Stops
-• Fare
-• Pricing snapshot
-• Status
-• Payment reference
-• Cancellation
-• Completion
-• Safety metadata
-
-Trip state must be strongly controlled.
-
-Define valid state transitions.
-
-────────────────────────────────────────
-
-TRIP STATE MACHINE
-
-Define states such as:
-
-• Requested
-• Searching
-• Offered
-• Assigned
-• Driver En Route
-• Driver Arrived
-• Trip Started
-• Trip In Progress
-• Stop Reached
-• Trip Completed
-• Rider Canceled
-• Driver Canceled
-• System Canceled
-• Disputed
-
-Define all valid and invalid transitions.
-
-Every transition must be:
-
-• Authorized
-• Idempotent
-• Auditable
-• Version-aware
-
-────────────────────────────────────────
-
-DRIVER STATE MACHINE
-
-Define:
-
-• Registered
-• Onboarding
-• Verification Pending
-• Verified
-• Offline
-• Available
-• Offered
-• En Route
-• Arrived
-• On Trip
-• Suspended
-• Deactivated
+* Principal Software Architect
+* Staff Backend Engineer
+* Database Architect
+* Distributed Systems Engineer
+* Security Engineer
+* Cloud Architect
+* DevOps Engineer
+* Performance Engineer
+* Reliability Engineer
+* QA Engineer
+* Staff Frontend Engineer
+* Staff Mobile Engineer
+* Technical Writer
+
+You are not implementing the application in this prompt.
+
+You are producing the detailed architecture blueprint that will govern implementation of the platform.
+
+The architecture must be concrete enough for experienced engineering agents to implement directly, while remaining focused on architectural decisions, boundaries, contracts, data ownership, failure behavior, and infrastructure relationships rather than writing application code.
+
+The repository is the source of truth for what already exists.
+
+Do not assume that another AI prompt, prior conversation, or previous architecture document exists.
+
+---
+
+# PROJECT
+
+Define the production architecture for an Uber-style ride-hailing platform supporting riders, drivers, transportation products, dispatch, trips, pricing, payments, earnings, safety, notifications, administration, analytics, and operational infrastructure.
+
+The platform must support:
+
+* web clients
+* rider mobile applications
+* driver mobile applications
+* backend services and domain modules
+* PostgreSQL
+* Redis
+* Kafka-compatible event streaming
+* BullMQ background processing
+* geospatial processing
+* map/routing provider integrations
+* payment provider integrations
+* notification providers
+* object storage
+* search infrastructure where justified
+* centralized observability
+* AWS infrastructure
+* Kubernetes
+* CI/CD
+* multi-environment deployment
+* regional scaling
+* disaster recovery
+
+The architecture must support a commercially realistic platform rather than a demonstration application.
+
+---
+
+# SOURCE OF TRUTH
+
+Before defining architecture, inspect the repository thoroughly.
+
+Establish:
+
+* repository structure
+* existing applications
+* existing packages
+* existing services
+* existing modules
+* current NestJS architecture
+* current Next.js architecture
+* current React Native/Expo architecture
+* current PostgreSQL/Prisma schema
+* current Redis usage
+* current queue implementation
+* current event infrastructure
+* current API conventions
+* current authentication implementation
+* current infrastructure
+* current CI/CD
+* current testing conventions
+* current observability implementation
+* existing external integrations
+* existing naming conventions
+
+Treat already implemented repository contracts as authoritative unless they are demonstrably incorrect, insecure, incompatible with the project requirements, or structurally incapable of supporting the required scale.
+
+Do not redesign working repository components merely for stylistic preference.
+
+Where the repository is incomplete, define the missing architecture required by this prompt.
+
+Do not refer to any previous AI-generated prompt as an architectural dependency.
+
+---
+
+# ARCHITECTURAL OBJECTIVES
+
+The architecture must provide:
+
+* clear domain ownership
+* clear data ownership
+* explicit service and module boundaries
+* scalable ride dispatch
+* high-frequency geospatial processing
+* resilient realtime communication
+* transactional financial correctness
+* secure authentication and authorization
+* strong privacy controls
+* reliable asynchronous processing
+* observable distributed workflows
+* horizontal scalability
+* geographic scalability
+* graceful degradation
+* recoverability
+* operational visibility
+* independently testable domains
+* long-term extensibility
+
+Architectural decisions must favor correctness and operational reliability over unnecessary abstraction.
+
+---
+
+# SYSTEM ARCHITECTURE
+
+Define the overall logical architecture of the platform.
+
+At minimum, identify and describe the responsibilities and boundaries for:
+
+* edge/API ingress
+* authentication and identity
+* rider domain
+* driver domain
+* driver onboarding/compliance
+* vehicle domain
+* availability and presence
+* location ingestion
+* ride request management
+* dispatch
+* trip management
+* pricing
+* payments
+* earnings
+* payouts
+* ratings
+* notifications
+* safety
+* fraud/risk
+* support
+* administration
+* analytics
+* search
+* media/object storage
+* event streaming
+* background jobs
+* observability
+
+Determine which responsibilities should initially exist as:
+
+* modular components inside a NestJS application
+* independently deployable services
+* infrastructure-managed capabilities
+
+Do not split services merely because they can theoretically be separate.
+
+Service boundaries must be justified by factors such as:
+
+* independent scaling
+* operational isolation
+* data ownership
+* failure isolation
+* deployment independence
+* security boundaries
+* workload characteristics
+* team ownership
+* lifecycle differences
+
+Avoid both extremes:
+
+* one uncontrolled monolith with shared mutable state everywhere
+* unnecessary microservice fragmentation that creates excessive distributed-system complexity
+
+---
+
+# DOMAIN BOUNDARIES
+
+Define bounded contexts and ownership boundaries.
+
+At minimum, establish explicit ownership for:
+
+## IDENTITY AND ACCESS
+
+Responsible for:
+
+* user identity
+* authentication
+* sessions
+* credential lifecycle
+* authorization primitives
+* role/permission relationships
+* account security state
+
+It must not own ride, payment, or dispatch business state.
+
+## RIDER
+
+Responsible for:
+
+* rider profile
+* rider preferences
+* rider-related settings
+* rider-facing account state
+
+It must not become the source of truth for trip execution.
+
+## DRIVER AND COMPLIANCE
 
 Separate:
 
-• Account state
-• Driver eligibility state
-• Availability state
-• Current trip state
+* driver identity/profile
+* driver onboarding
+* compliance requirements
+* eligibility state
+* document verification
+* operational suspension/blocking
 
-────────────────────────────────────────
+Driver authentication must not automatically imply dispatch eligibility.
 
-VEHICLE DOMAIN
+## VEHICLE
 
-Support:
+Responsible for:
 
-• Vehicle registration
-• Category
-• Make
-• Model
-• Year
-• Color
-• Plate
-• Capacity
-• Accessibility
-• Verification
-• Insurance
-• Registration status
+* vehicle identity
+* vehicle attributes
+* category eligibility
+* registration metadata
+* compliance relationships
+* active/inactive state
 
-Define vehicle eligibility for trip categories.
+Define how vehicle eligibility interacts with driver eligibility without creating circular ownership.
 
-────────────────────────────────────────
+## DRIVER AVAILABILITY AND PRESENCE
 
-DRIVER ONBOARDING
+Responsible for:
 
-Define workflows for:
+* online/offline state
+* driver operational state
+* current availability
+* ephemeral presence
+* readiness for dispatch
 
-• Identity
-• Driver license
-• Background verification
-• Vehicle registration
-• Insurance
-• Profile
-• Required documents
+Define how this domain interacts with:
 
-Support states:
+* current trip state
+* location
+* compliance
+* vehicle eligibility
+* dispatch
 
-• Draft
-• Submitted
-• Pending Review
-• Approved
-• Rejected
-• Suspended
+## LOCATION
 
-Use external provider abstractions.
-
-────────────────────────────────────────
-
-LOCATION ARCHITECTURE
-
-Design a high-scale location platform supporting:
-
-• Driver location
-• Rider location
-• Pickup location
-• Dropoff location
-• Route progress
-• Geofences
-
-Define:
-
-• Update frequency
-• Accuracy
-• Compression
-• Validation
-• Privacy
-• Retention
-
-Do not persist every GPS update indefinitely in PostgreSQL.
-
-────────────────────────────────────────
-
-REAL-TIME LOCATION ARCHITECTURE
-
-Support:
-
-• Driver location streams
-• Rider trip tracking
-• Location heartbeats
-• WebSocket connections
-• Reconnection
-• Ordering
-• Stale updates
-• Regional routing
-
-Evaluate:
-
-• Redis
-• WebSockets
-• Kafka
-• PostGIS
-
-Define which component owns which responsibility.
-
-────────────────────────────────────────
-
-GEOLOCATION PRIVACY
-
-Define:
-
-• Who can see driver location
-• Who can see rider location
-• During which trip states
-• For how long
-• Approximation/anonymization where required
-• Retention
-
-Administrative location access must be tightly restricted and audited.
-
-────────────────────────────────────────
-
-GEOSPATIAL ARCHITECTURE
-
-Use PostGIS where authoritative spatial queries are needed.
-
-Evaluate Redis geospatial functionality for:
-
-• Nearby driver discovery
-• Temporary availability
-
-Use PostGIS for:
-
-• Service-area boundaries
-• Geofences
-• Airport zones
-• Historical spatial analysis where justified
-
-────────────────────────────────────────
-
-DISPATCH ARCHITECTURE
-
-Design low-latency dispatch.
-
-Flow:
-
-Ride Request
-→ Candidate Search
-→ Eligibility
-→ Scoring
-→ Driver Offer
-→ Driver Response
-→ Assignment
-→ Trip
-
-Define:
-
-• Regional dispatch
-• Candidate pool
-• Timeouts
-• Retries
-• Reassignment
-• Fallback
-
-Do not make all global drivers compete in one global matching operation.
-
-────────────────────────────────────────
-
-MATCHING ARCHITECTURE
-
-Define:
-
-1. Candidate generation
-2. Eligibility
-3. ETA
-4. Scoring
-5. Offer
-6. Acceptance
-7. Reservation
-8. Assignment
-
-Candidate scoring may consider:
-
-• ETA
-• Distance
-• Vehicle category
-• Accessibility
-• Driver availability
-• Trip direction
-• Regional policy
-• Rider preferences
-
-Do not hard-code the design around a single matching algorithm.
-
-────────────────────────────────────────
-
-MATCHING RACE CONDITIONS
-
-Prevent:
-
-• Driver accepting two rides
-• Duplicate assignments
-• Duplicate offers
-• Stale availability
-• Offer replay
-• Late acceptance
-
-Use:
-
-• Idempotency
-• Short-lived leases
-• Atomic state transitions
-• Optimistic concurrency
-• Redis coordination where appropriate
-
-Avoid long-lived distributed locks.
-
-────────────────────────────────────────
-
-DRIVER OFFER ARCHITECTURE
-
-Support:
-
-• Offer creation
-• Delivery
-• Acceptance
-• Rejection
-• Expiration
-• Cancellation
-
-Define:
-
-• Offer timeout
-• Idempotency
-• Retry
-• Reassignment
-• Driver response ordering
-
-────────────────────────────────────────
-
-SCHEDULED RIDES
-
-Support:
-
-• Future pickup
-• Reservation
-• Reminder
-• Driver assignment
-• Driver replacement
-• Cancellation
-• Reconciliation
-
-Use background scheduling.
-
-────────────────────────────────────────
-
-MULTI-STOP RIDES
-
-Support:
-
-• Stop creation
-• Stop ordering
-• Stop completion
-• Stop removal
-• Stop insertion
-• Route recalculation
-• ETA recalculation
-• Fare recalculation
-
-Define pricing behavior when stops change.
-
-────────────────────────────────────────
-
-SHARED RIDES
-
-Create an extensible shared-ride architecture.
-
-Support:
-
-• Multiple riders
-• Shared route
-• Pickup sequence
-• Dropoff sequence
-• Capacity
-• Fare allocation
-• Shared-trip state
-
-Keep shared-trip logic isolated from ordinary one-rider trips.
-
-────────────────────────────────────────
-
-MAPS ARCHITECTURE
-
-Create an abstraction around:
-
-• Geocoding
-• Reverse geocoding
-• Places
-• Directions
-• ETA
-• Distance
-• Traffic
-• Map rendering
-• Route matching
-
-Do not tightly couple core business domains to one provider.
-
-────────────────────────────────────────
-
-ETA ARCHITECTURE
-
-Support:
-
-• Driver-to-pickup ETA
-• Trip ETA
-• Dynamic traffic
-• Route changes
-• Driver movement
-
-Define:
-
-• Caching
-• Refresh frequency
-• Accuracy
-• Stale-data handling
-• Provider fallback
-
-────────────────────────────────────────
-
-FARE ARCHITECTURE
-
-Fare components may include:
-
-• Base
-• Distance
-• Time
-• Minimum fare
-• Booking fee
-• Tolls
-• Taxes
-• Promotions
-• Surge
-• Other regulated fees
-
-Use exact monetary arithmetic.
-
-────────────────────────────────────────
-
-PRICING SNAPSHOT
-
-At request/confirmation time preserve:
-
-• Pricing version
-• Fare components
-• Surge multiplier
-• Currency
-• Tax assumptions
-• Promotion
-• Calculation metadata
-
-Completed trips must remain reconstructable.
-
-────────────────────────────────────────
-
-SURGE ARCHITECTURE
-
-Support:
-
-• Geographic zones
-• Demand
-• Supply
-• Time windows
-• Ride categories
-• Multipliers
-• Caps
-• Regional regulations
+Responsible for high-frequency location ingestion and geospatial operational state.
 
 Separate:
 
-• Demand measurement
-• Supply measurement
-• Surge calculation
-• Pricing application
+* ephemeral live location
+* durable location information required for business or legal purposes
+* historical trip location
+* geographic service boundaries
 
-────────────────────────────────────────
+Define retention and privacy boundaries.
 
-PROMOTION ARCHITECTURE
+## RIDE REQUEST
 
-Support:
+Responsible for:
 
-• Promo codes
-• Campaigns
-• Eligibility
-• Usage limits
-• Customer limits
-• Expiration
-• Region
-• Trip category
+* rider request creation
+* ride product
+* pickup
+* destination
+* request lifecycle
+* rider cancellation
+* request metadata
+
+Do not allow ride-request state to become a substitute for trip state.
+
+## DISPATCH
+
+Responsible for:
+
+* candidate driver discovery
+* eligibility filtering
+* offer generation
+* offer expiration
+* assignment
+* reassignment
+* concurrency control
+* matching state
+
+Dispatch must not own authoritative rider identity, payment accounts, or driver compliance records.
+
+## TRIP
+
+Responsible for:
+
+* accepted ride execution
+* pickup phase
+* arrival
+* trip start
+* trip progress
+* trip completion
+* trip cancellation/termination
+* trip state transitions
+
+Define a clear boundary between dispatch assignment and trip execution.
+
+## PRICING
+
+Responsible for:
+
+* fare calculation
+* market configuration
+* pricing rules
+* surge/dynamic pricing
+* fees
+* taxes where applicable
+* promotions
+* cancellation charges
+* final fare
+
+Pricing must produce auditable results.
+
+## PAYMENTS
+
+Responsible for:
+
+* payment methods through the provider abstraction
+* payment intents
+* authorization
+* capture
+* refunds
+* provider webhooks
+* reconciliation
+* payment state
+
+Do not allow trip services to directly manipulate provider APIs outside the payment boundary.
+
+## EARNINGS AND PAYOUTS
+
+Responsible for:
+
+* driver earnings
+* platform fee accounting
+* adjustments
+* payout eligibility
+* payout records
+* payout provider interactions
+
+Separate rider payment state from driver payout state.
+
+## NOTIFICATIONS
+
+Responsible for:
+
+* notification creation
+* channel selection
+* delivery orchestration
+* retry
+* provider integration
+* notification status
+
+Notifications are not the authoritative source for trip or payment state.
+
+## SAFETY
+
+Responsible for:
+
+* safety incidents
+* emergency workflows
+* trusted-contact capabilities
+* incident escalation
+* safety-related audit access
+
+## FRAUD AND RISK
+
+Responsible for:
+
+* risk signals
+* fraud assessments
+* abuse detection
+* account/rider/driver risk states
+* promotional abuse controls
+* payment abuse indicators
+
+Risk services must not become a mandatory synchronous dependency for every non-risk-critical action if that would introduce unnecessary availability coupling.
+
+## SUPPORT
+
+Responsible for:
+
+* support cases
+* support interactions
+* case state
+* issue categorization
+* escalation
+
+Support must reference operational entities without owning their underlying truth.
+
+## ADMINISTRATION
+
+Responsible for:
+
+* operational controls
+* administrative workflows
+* privileged actions
+* configuration management
+* audit access
+
+Administrative actions must not bypass domain-level authorization.
+
+---
+
+# DOMAIN DEPENDENCY MODEL
+
+Define the allowed dependency direction between domains.
 
 Prevent:
 
-• Double redemption
-• Negative fares
-• Reuse beyond limits
-
-────────────────────────────────────────
-
-PAYMENT ARCHITECTURE
-
-Support:
-
-• Payment methods
-• Authorization
-• Capture
-• Failure
-• Refund
-• Partial refund
-• Chargebacks
-• Reconciliation
-
-Separate:
-
-• Trip state
-• Payment state
-• Wallet state
-• Driver earning state
-
-────────────────────────────────────────
-
-WALLET ARCHITECTURE
-
-Support:
-
-• Promotional credits
-• Refund credits
-• Stored credits
-• Business credits
-
-Use an immutable ledger:
-
-• Transaction
-• Entry
-• Amount
-• Currency
-• Source
-• Expiration
-• Balance projection
-
-The wallet ledger is authoritative.
-
-Redis is not.
-
-────────────────────────────────────────
-
-DRIVER EARNINGS
-
-Support:
-
-• Trip earnings
-• Tips
-• Incentives
-• Bonuses
-• Fees
-• Adjustments
-• Refund effects
-
-Use immutable financial ledger entries.
-
-────────────────────────────────────────
-
-PAYOUTS
-
-Support:
-
-• Pending earnings
-• Available earnings
-• Payout
-• Provider reference
-• Payout status
-• Failed payout
-• Reconciliation
-
-Prevent:
-
-• Duplicate payout
-• Double withdrawal
-• Payout beyond available balance
-
-────────────────────────────────────────
-
-RATINGS AND REVIEWS
-
-Support:
-
-• Rider-to-driver rating
-• Driver-to-rider rating
-• Structured feedback
-• Optional review
-• Rating eligibility
-• Rating window
-• Moderation
-
-Prevent duplicate ratings.
-
-────────────────────────────────────────
-
-MESSAGING
-
-Design trip-scoped messaging between:
-
-• Rider
-• Driver
-
-Support:
-
-• Message
-• Conversation
-• Read state
-• Attachments where required
-• Expiration
-• Safety controls
-
-Avoid exposing personal phone numbers.
-
-────────────────────────────────────────
-
-SAFETY ARCHITECTURE
-
-Support:
-
-• Trip sharing
-• Trusted contacts
-• Emergency assistance boundary
-• Safety check-ins
-• Driver/rider information
-• Incident reporting
-• Safety alerts
-
-Define strict permissions.
-
-Software must not be represented as guaranteeing physical safety.
-
-────────────────────────────────────────
-
-TRIP SHARING
-
-Support temporary trip-sharing access.
-
-Define:
-
-• Share token
-• Recipient
-• Expiration
-• Revocation
-• Visible trip data
-
-Do not expose unnecessary personal information.
-
-────────────────────────────────────────
-
-FRAUD AND RISK
-
-Protect against:
-
-• Fake accounts
-• GPS spoofing
-• Driver/rider collusion
-• Payment fraud
-• Coupon abuse
-• Referral abuse
-• Chargeback abuse
-• Fake trips
-• Cash abuse
-• Account takeover
-• Location anomalies
-
-Define:
-
-• Signals
-• Rules
-• Scoring
-• Actions
-• Appeals
-• Manual review
-
-────────────────────────────────────────
-
-BLOCKING AND REPORTING
-
-Support:
-
-• Rider blocks
-• Driver blocks
-• Safety reports
-• Fraud reports
-• Harassment reports
-
-A block should influence future matching appropriately.
-
-────────────────────────────────────────
-
-SUPPORT
-
-Design support-case architecture for:
-
-• Trip disputes
-• Payment disputes
-• Refunds
-• Lost items
-• Safety
-• Driver support
-• Rider support
-
-Case lifecycle:
-
-• Created
-• Assigned
-• Investigating
-• Waiting
-• Resolved
-• Closed
-• Reopened
-
-────────────────────────────────────────
-
-BUSINESS ACCOUNTS
-
-Support:
-
-• Business organization
-• Members
-• Roles
-• Employee eligibility
-• Business payment
-• Cost centers
-• Ride policies
-• Spending limits
-• Business receipts
-• Business trips
-
-Separate business and personal ride data.
-
-────────────────────────────────────────
-
-RECEIPTS
-
-Define receipt architecture containing:
-
-• Trip
-• Timestamp
-• Pickup
-• Dropoff
-• Driver
-• Vehicle
-• Fare
-• Taxes
-• Promotions
-• Tips
-• Payment
-• Currency
-
-Receipts must remain reconstructable.
-
-────────────────────────────────────────
-
-ANALYTICS
-
-Design analytics for:
-
-OPERATIONS
-
-• Ride requests
-• Match rate
-• Acceptance
-• Cancellation
-• Completion
-• ETA
-• Supply
-• Demand
-
-DRIVER
-
-• Online time
-• Trips
-• Earnings
-• Acceptance
-• Cancellation
-• Ratings
-
-RIDER
-
-• Requests
-• Completion
-• Spend
-• Retention
-
-FINANCIAL
-
-• GMV
-• Revenue
-• Take rate
-• Incentives
-• Refunds
-• Payouts
-
-Do not overload PostgreSQL with raw telemetry.
-
-────────────────────────────────────────
-
-EVENT-DRIVEN ARCHITECTURE
-
-Define Kafka/Redpanda events including:
-
-• AccountCreated
-• DriverRegistered
-• DriverVerified
-• DriverSuspended
-• VehicleRegistered
-• VehicleVerified
-• DriverWentOnline
-• DriverWentOffline
-• DriverLocationUpdated
-• RideRequested
-• RideMatchingStarted
-• DriverOfferCreated
-• DriverOfferAccepted
-• DriverOfferRejected
-• DriverOfferExpired
-• RideMatched
-• RideAssignmentChanged
-• RideCanceled
-• DriverArrived
-• TripStarted
-• TripStopReached
-• TripCompleted
-• FareCalculated
-• PaymentAuthorized
-• PaymentCaptured
-• PaymentFailed
-• RefundCreated
-• PromotionRedeemed
-• RatingSubmitted
-• ReviewSubmitted
-• WalletCreditAdded
-• WalletCreditUsed
-• DriverEarningCreated
-• DriverPayoutCreated
-• NotificationCreated
-• SafetyIncidentReported
-• TripShared
-• SupportCaseCreated
-• BusinessTripCreated
-• AuditLogCreated
-• FeatureFlagChanged
-
-Events must:
-
-• Be versioned
-• Be idempotently consumed
-• Contain only required information
-• Preserve ownership boundaries
-
-────────────────────────────────────────
-
-QUEUE ARCHITECTURE
-
-Define BullMQ queues for:
-
-• Scheduled rides
-• Driver verification
-• Notifications
-• Receipt generation
-• Payment reconciliation
-• Payout processing
-• Fraud processing
-• Support workflows
-• Data cleanup
-• Promotion expiration
-• Analytics aggregation
-
-For every queue define:
-
-• Producer
-• Consumer
-• Retry
-• Backoff
-• Timeout
-• Concurrency
-• Idempotency
-• Dead-letter handling
-• Monitoring
-
-────────────────────────────────────────
-
-API ARCHITECTURE
-
-Define public/internal/real-time APIs.
-
-RIDER
-
-• Register
-• Login
-• Profile
-• Saved places
-• Payment methods
-• Fare estimate
-• Ride request
-• Ride status
-• Cancel
-• Trip tracking
-• History
-• Receipt
-• Rating
-• Promotion
-• Wallet
-• Support
-
-DRIVER
-
-• Register
-• Onboarding
-• Documents
-• Vehicle
-• Verification
-• Availability
-• Location
-• Ride offers
-• Accept
-• Reject
-• Arrive
-• Start
-• Complete
-• Earnings
-• Incentives
-• Payouts
-• Ratings
-• Support
-
-REAL-TIME
-
-• Location
-• Dispatch offers
-• Ride status
-• Trip tracking
-• Messaging
-
-ADMIN
-
-• Riders
-• Drivers
-• Vehicles
-• Trips
-• Payments
-• Fraud
-• Safety
-• Support
-• Promotions
-• Business
-• Analytics
-• Audit
-
-Define:
-
-• Authentication
-• Authorization
-• API versioning
-• Validation
-• Pagination
-• Cursor pagination
-• Error format
-• Rate limiting
-• Idempotency
-
-────────────────────────────────────────
-
-DATABASE ARCHITECTURE
-
-Design PostgreSQL/PostGIS for:
-
-• Hundreds of millions of riders
-• Millions of drivers
-• Millions of vehicles
-• Large trip history
-• Large financial ledgers
-• High-volume operational records
-
-Define:
-
-• Database ownership
-• Schemas
-• Primary keys
-• Foreign keys
-• Unique constraints
-• Check constraints
-• Spatial indexes
-• Partitioning
-• Archival
-• Retention
-• Read replicas
-• Connection pooling
-• Backup
-• Recovery
-
-Partitioning candidates include:
-
-• Trips
-• Trip events
-• Payments
-• Refunds
-• Driver earnings
-• Payouts
-• Support cases
-• Audit logs
-• Analytics references
-
-Do not treat raw GPS streams as ordinary transactional records.
-
-────────────────────────────────────────
-
-PRISMA STRATEGY
-
-Define:
-
-• Schema ownership
-• Service-specific Prisma clients where appropriate
-• Migration ownership
-• Transaction boundaries
-• Read replicas
-• Connection pooling
-• Query optimization
-• Large-table migration strategy
-
-────────────────────────────────────────
-
-REDIS ARCHITECTURE
-
-Use Redis for:
-
-• Driver availability
-• Driver location
-• Nearby-driver candidates
-• Active trip state
-• Matching coordination
-• Short-lived leases
-• ETA cache
-• Rate limiting
-• Idempotency
-• WebSocket coordination
-• Notification deduplication
-
-For each define:
-
-• Key pattern
-• TTL
-• Invalidation
-• Consistency
-• Failure behavior
-
-Redis must never be authoritative for:
-
-• Trips
-• Payments
-• Wallets
-• Earnings
-• Payouts
-• Driver identity
-• Historical data
-
-────────────────────────────────────────
-
-MULTI-REGION ARCHITECTURE
-
-Design:
-
-• Regional application clusters
-• Regional dispatch
-• Regional geospatial processing
-• Regional data ownership
-• Global routing
-• Cross-region events where required
-• Regional failover
-
-Dispatch must prefer regional drivers and regional state.
-
-Avoid unnecessary cross-region synchronous calls in the dispatch critical path.
-
-────────────────────────────────────────
-
-SCALABILITY
-
-Design for:
-
-• Hundreds of millions of riders
-• Millions of drivers
-• Tens of millions of concurrent mobile sessions
-• Millions of active drivers
-• Massive location updates
-• Very high ride-request throughput
-• Large financial throughput
-
-Analyze scaling for:
-
-• API gateway
-• WebSocket gateways
-• Location service
-• Redis
-• PostGIS
-• Dispatch
-• Matching
-• Kafka
-• Payments
-• Notifications
-• Maps
-• Support
-• Analytics
-
-Identify bottlenecks and mitigation strategies.
-
-────────────────────────────────────────
-
-FAILURE SCENARIOS
-
-Define graceful behavior when:
-
-• PostgreSQL unavailable
-• Redis unavailable
-• Kafka unavailable
-• Maps provider unavailable
-• Payment provider unavailable
-• Push provider unavailable
-• WebSocket gateway fails
-• Dispatch service fails
-• Matching service fails
-• Region unavailable
-
-For each define:
-
-• Detection
-• Timeout
-• Retry
-• Fallback
-• Degraded behavior
-• Recovery
-• Reconciliation
-
-────────────────────────────────────────
-
-DATA CONSISTENCY
-
-Explicitly define consistency for:
-
-• Accounts
-• Driver verification
-• Driver availability
-• Ride request
-• Driver assignment
-• Trip state
-• Fare
-• Payment
-• Wallet
-• Earnings
-• Payouts
-• Promotions
-• Ratings
-• Safety
-• Support
-• Business accounts
-
-Identify where to use:
-
-• Strong consistency
-• Eventual consistency
-• Idempotency
-• Optimistic concurrency
-• Short-lived leases
-• Transactional outbox
-
-────────────────────────────────────────
-
-SECURITY ARCHITECTURE
-
-Design:
-
-AUTHENTICATION
-
-• Passwords
-• OAuth
-• MFA
-• Passkeys where approved
-• Sessions
-• Device authentication
-
-AUTHORIZATION
-
-• RBAC
-• Resource ownership
-• Rider scope
-• Driver scope
-• Business scope
-• Administrative scope
-
-LOCATION SECURITY
-
-• Location access rules
-• Location privacy
-• Retention
-• Audit
-
-PAYMENT SECURITY
-
-• Provider tokens
-• Webhook validation
-• Idempotency
-• Secret management
-
-APPLICATION SECURITY
-
-• Validation
-• Rate limiting
-• Secure headers
-• CORS
-• CSRF where applicable
-• XSS prevention
-• SQL injection protection
-• SSRF mitigation where relevant
-
-────────────────────────────────────────
-
-ABUSE PREVENTION
-
-Design against:
-
-• Fake-driver accounts
-• Fake rider accounts
-• GPS spoofing
-• Trip manipulation
-• Driver collusion
-• Rider collusion
-• Coupon abuse
-• Referral abuse
-• Payment abuse
-• Cash fraud
-• API abuse
-• Credential stuffing
-• Account takeover
-
-Define prevention and detection.
-
-────────────────────────────────────────
-
-OBSERVABILITY
-
-Design:
-
-• Structured logs
-• Metrics
-• Distributed tracing
-• Correlation IDs
-• Dispatch metrics
-• Matching metrics
-• Location metrics
-• ETA metrics
-• Trip metrics
-• Payment metrics
-• Payout metrics
-• Safety metrics
-• Fraud metrics
-• Queue metrics
-
-Use:
-
-• OpenTelemetry
-• Prometheus
-• Grafana
-• Loki
-• Tempo
-
-Define dashboards and alerts.
-
-Critical metrics include:
-
-• Ride-request rate
-• Matching latency
-• Match success rate
-• Driver-offer latency
-• Offer acceptance
-• Assignment failures
-• Location freshness
-• ETA latency
-• Trip completion
-• Payment success
-• Cancellation
-• Queue backlog
-
-────────────────────────────────────────
-
-DISASTER RECOVERY
-
-Define:
-
-• RTO
-• RPO
-• PostgreSQL backup
-• PITR
-• Redis recovery
-• Kafka recovery
-• S3 recovery
-• Regional recovery
-
-Include recovery procedures for:
-
-• Database failure
-• Dispatch failure
-• Matching failure
-• Region failure
-• Payment failure
-• Location-system failure
-
-────────────────────────────────────────
-
-TESTING ARCHITECTURE
-
-UNIT:
-
-• Fare calculation
-• Pricing
-• Surge
-• Dispatch rules
-• Matching
-• Trip state
-• Authorization
-• Promotion
-• Wallet
-• Earnings
-
-INTEGRATION:
-
-• PostgreSQL
-• PostGIS
-• Redis
-• Kafka
-• BullMQ
-• Maps
-• Payments
-• Notifications
-
-CONTRACT:
-
-• REST
-• WebSocket
-• Events
-• Webhooks
-
-E2E:
-
-• Rider registration
-• Driver onboarding
-• Ride request
-• Matching
-• Driver acceptance
-• Pickup
-• Trip
-• Payment
-• Receipt
-• Rating
-• Payout
-
-PERFORMANCE:
-
-• Location throughput
-• Dispatch
-• Matching
-• Fare estimates
-• API
-• Notifications
-
-RESILIENCE:
-
-• Database failure
-• Redis failure
-• Kafka failure
-• Maps failure
-• Payment failure
-• WebSocket failure
-• Region failure
-
-SECURITY:
-
-• Authentication
-• Authorization
-• Location privacy
-• Financial security
-• Fraud
-• Abuse
-
-────────────────────────────────────────
-
-ARCHITECTURAL DECISION RECORDS
-
-Create ADRs for:
-
-• Architecture style
-• Service decomposition
-• Dispatch
-• Matching
-• Location
-• Redis geospatial state
-• PostGIS
-• Maps abstraction
-• Pricing
-• Surge
-• Payments
-• Wallet
-• Driver earnings
-• Payouts
-• Real-time architecture
-• Scheduled rides
-• Multi-stop rides
-• Shared rides
-• Business accounts
-• Safety
-• Fraud
-• Multi-region
-• Kubernetes
-• Terraform
-• Observability
-• Secrets management
-
-Each ADR must contain:
-
-• Context
-• Decision
-• Alternatives considered
-• Consequences
-
-────────────────────────────────────────
-
-ARCHITECTURE VOLUME 1 OUTPUT
-
-Produce:
-
-1. Executive Architecture Overview
-2. System Context
-3. Architectural Approach
-4. System Architecture
-5. Client Architecture
-6. Domain Decomposition
-7. Service Decomposition
-8. Service Ownership Matrix
-9. Communication Matrix
-10. Monorepo Architecture
-11. Detailed Folder Hierarchy
-12. Core Domain Model
-13. Aggregate Boundaries
-14. Trip Aggregate
-15. Trip State Machine
-16. Driver State Machine
-17. Complete Text-Based ERD
-18. PostgreSQL/PostGIS Architecture
-19. Prisma Strategy
-20. Redis Architecture
-21. Location Architecture
-22. Real-Time Location Architecture
-23. Geospatial Architecture
-24. Driver Availability Architecture
-25. Dispatch Architecture
-26. Matching Architecture
-27. Driver Offer Architecture
-28. Scheduled Ride Architecture
-29. Multi-Stop Ride Architecture
-30. Shared Ride Architecture
-31. Maps Architecture
-32. ETA Architecture
-33. Fare Architecture
-34. Pricing Snapshot
-35. Surge Architecture
-36. Promotion Architecture
-37. Payment Architecture
-38. Wallet Architecture
-39. Driver Earnings Architecture
-40. Payout Architecture
-41. Ratings and Reviews
-42. Messaging Architecture
-43. Safety Architecture
-44. Trip Sharing
-45. Fraud and Risk Architecture
-46. Blocking and Reporting
-47. Support Architecture
-48. Business Account Architecture
-49. Receipt Architecture
-50. Analytics Architecture
-51. Event-Driven Architecture
-52. Queue Architecture
-53. API Architecture
-54. Multi-Region Architecture
-55. Scalability Strategy
-56. Failure Scenarios
-57. Data Consistency Strategy
-58. Security Architecture
-59. Abuse Prevention
-60. Observability Architecture
-61. Disaster Recovery
-62. Testing Architecture
-63. Architectural Decision Records
-
-────────────────────────────────────────
-
-QUALITY REQUIREMENTS
-
-Every architectural decision must evaluate:
-
-• Scalability
-• Availability
-• Security
-• Privacy
-• Latency
-• Data consistency
-• Operational complexity
-• Cost
-• Developer productivity
-• Maintainability
-• Future extensibility
+* cyclic domain dependencies
+* unrestricted database access
+* direct mutation of another domain's tables
+* arbitrary internal service calls
+* hidden shared mutable state
 
 Prefer:
 
-• Regional dispatch
-• Explicit domain ownership
-• PostGIS for authoritative spatial data
-• Redis for ephemeral geospatial state
-• Stateless APIs
-• Event-driven communication
-• Idempotent consumers
-• Transactional outbox
-• Strong trip-state correctness
-• Strong financial correctness
-• Short-lived resource leases
-• Horizontal scaling
-• Graceful degradation
+* domain-owned persistence
+* explicit application interfaces
+* domain events
+* asynchronous workflows
+* controlled synchronous calls for operations that genuinely require immediate responses
 
-Avoid:
+For every cross-domain dependency, classify it as one of:
 
-• Unnecessary microservices
-• Shared database ownership
-• Global synchronous matching
-• Permanent storage of every GPS update
-• Long-lived distributed locks
-• Redis as a system of record
-• Tight coupling to one maps provider
-• Application servers handling unnecessary map/media payloads
-• Frontend-only security
-• Single points of failure
-• Premature complexity
+* synchronous query
+* synchronous command
+* asynchronous event
+* background job
+* shared infrastructure capability
 
-────────────────────────────────────────
+Document why that interaction type is appropriate.
 
-OUTPUT RULES
+---
 
-This is an architecture document only.
+# DATA OWNERSHIP
 
-Do not generate source code.
+Define exactly which domain owns each major category of durable data.
 
-Do not generate placeholder implementations.
+At minimum clarify ownership for:
 
-Do not generate Dockerfiles.
+* users
+* credentials/session state
+* rider profiles
+* drivers
+* driver compliance
+* vehicles
+* vehicle eligibility
+* driver availability
+* ride requests
+* dispatch assignments/offers
+* trips
+* trip locations
+* pricing configurations
+* fare calculations
+* payments
+* refunds
+* driver earnings
+* payouts
+* ratings
+* notifications
+* safety cases
+* support cases
+* promotions
+* fraud signals
+* administrative actions
+* audit records
 
-Do not generate Kubernetes manifests.
+No domain may write another domain's authoritative records directly unless a clearly documented architectural exception exists.
 
-Do not generate Terraform files.
+---
 
-Do not generate frontend components.
+# POSTGRESQL ARCHITECTURE
 
-Do not generate mobile components.
+Define the PostgreSQL architecture supporting transactional business state.
 
-Do not implement backend services.
+Specify:
 
-Provide detailed:
+* database ownership model
+* schema organization
+* table ownership
+* transaction boundaries
+* indexing principles
+* foreign-key strategy
+* uniqueness strategy
+* state-transition constraints
+* migration strategy
+* connection management
+* read/write behavior
+* replication strategy
+* backup strategy
+* archival strategy
+* high-volume table strategy
 
-• Architecture specifications
-• Domain boundaries
-• Service responsibilities
-• State machines
-• Ownership rules
-• Database schemas
-• ERD
-• API contracts
-• Event contracts
-• Queue definitions
-• Geospatial architecture
-• Dispatch architecture
-• Matching architecture
-• Pricing architecture
-• Financial architecture
-• Safety architecture
-• Security architecture
-• Scalability strategy
-• Multi-region architecture
-• Failure handling
-• Disaster recovery
-• Testing architecture
-• ADRs
+Determine where a modular monolith can safely share one PostgreSQL deployment and where independent service ownership requires stronger isolation.
 
-The resulting architecture must be sufficiently detailed that separate backend, frontend, mobile, infrastructure, DevOps, and QA teams can implement the mobility platform without making major architectural decisions themselves.
+Do not prematurely introduce separate databases when a shared transactional database with strict logical ownership provides a more reliable initial architecture.
+
+Where multiple services require separate persistence, define:
+
+* authoritative owner
+* synchronization mechanism
+* eventual-consistency implications
+* recovery strategy
+* rebuild strategy
+
+---
+
+# GEOSPATIAL ARCHITECTURE
+
+Define the geospatial strategy for:
+
+* rider pickup coordinates
+* destination coordinates
+* driver live location
+* nearby-driver discovery
+* city service zones
+* geofencing
+* airport zones
+* restricted areas
+* vehicle/ride-product geographic eligibility
+
+Use durable geospatial storage for authoritative geographic configuration and short-lived high-performance mechanisms for live driver discovery.
+
+Define:
+
+* coordinate precision
+* update frequency
+* retention
+* indexing
+* radius search
+* geographic partitioning
+* location freshness
+* stale-driver detection
+
+Establish how the system handles a driver whose location is old, missing, invalid, or inconsistent.
+
+---
+
+# DRIVER LOCATION PIPELINE
+
+Design the complete driver-location flow.
+
+Define:
+
+1. Mobile location acquisition.
+2. Client-side sampling/batching.
+3. Secure transport.
+4. Gateway/API ingestion.
+5. Validation.
+6. Rate limiting.
+7. Ephemeral location update.
+8. Dispatch visibility.
+9. Realtime fan-out to authorized riders where applicable.
+10. Optional durable persistence.
+11. Metrics and tracing.
+12. Expiration/staleness handling.
+
+Define the maximum acceptable load and behavior during demand spikes.
+
+Do not persist every location update synchronously to the primary transactional database by default.
+
+Define how location updates remain useful when:
+
+* Redis is degraded
+* clients reconnect
+* packets arrive late
+* packets arrive out of order
+* a driver rapidly changes state
+* a mobile device sends malformed coordinates
+
+---
+
+# RIDER REQUEST ARCHITECTURE
+
+Define the architecture for ride creation.
+
+The request path must establish:
+
+* authenticated rider
+* pickup
+* destination
+* ride category
+* pricing estimate
+* geographic validity
+* rider eligibility
+* payment readiness where required
+* request idempotency
+* ride request creation
+* dispatch initiation
+
+Separate estimate generation from authoritative final fare calculation.
+
+Define how duplicate requests are prevented.
+
+Define how the system responds when dispatch, pricing, maps, or payment dependencies are temporarily unavailable.
+
+---
+
+# DISPATCH ARCHITECTURE
+
+Dispatch is one of the most important distributed-system components.
+
+Define:
+
+* dispatch ownership
+* candidate search
+* eligibility filters
+* geographic partitioning
+* ranking criteria
+* offer generation
+* offer expiration
+* concurrent offers
+* acceptance
+* rejection
+* timeout
+* reassignment
+* cancellation
+* retry
+* idempotency
+* race-condition prevention
+* stale-location handling
+* driver state validation
+
+Establish whether dispatch should use a city/region partitioning model.
+
+A dispatch worker must not blindly issue multiple simultaneous offers that can create contradictory assignments.
+
+Define how assignment uniqueness is protected under concurrency.
+
+Specify the authoritative transaction or compare-and-set mechanism that ultimately commits driver assignment.
+
+---
+
+# DISPATCH CANDIDATE MODEL
+
+Define what information dispatch needs to evaluate a driver.
+
+Potential inputs include:
+
+* driver eligibility
+* vehicle eligibility
+* online state
+* current trip state
+* current location
+* location freshness
+* ride category
+* geographic restrictions
+* estimated distance
+* estimated arrival time
+* driver cooldown or temporary restrictions
+* risk restrictions where appropriate
+
+Separate immutable or durable eligibility information from rapidly changing ephemeral state.
+
+Do not duplicate entire driver profiles into dispatch storage unless justified.
+
+---
+
+# RIDE OFFER STATE
+
+Design an explicit ride-offer lifecycle.
+
+Define valid states such as:
+
+* created
+* offered
+* acknowledged
+* accepted
+* rejected
+* expired
+* canceled
+* superseded
+
+Define:
+
+* offer TTL
+* assignment uniqueness
+* duplicate offer handling
+* driver reconnect behavior
+* client acknowledgment
+* acceptance race handling
+
+An expired offer must not be accepted later due to stale mobile state.
+
+---
+
+# TRIP ARCHITECTURE
+
+Define trip lifecycle ownership independently from ride-request and dispatch systems.
+
+At minimum define:
+
+* accepted
+* driver en route
+* driver arrived
+* rider verification
+* started
+* in progress
+* completed
+* canceled
+* terminated due to exceptional circumstances
+
+Every transition must define:
+
+* authorized actor
+* valid source state
+* valid destination state
+* concurrency rules
+* idempotency
+* emitted events
+* audit behavior
+* failure handling
+
+The trip domain must remain authoritative for actual trip execution state.
+
+---
+
+# REALTIME ARCHITECTURE
+
+Define realtime communication for:
+
+* driver location to active rider
+* ride request state
+* dispatch offer state
+* trip state
+* notifications
+* driver operational state
+* support/safety events where appropriate
+
+Use WebSockets where realtime delivery materially improves behavior.
+
+Define:
+
+* connection lifecycle
+* authentication
+* authorization
+* topic/channel model
+* subscription rules
+* connection limits
+* heartbeat
+* reconnect behavior
+* missed-event recovery
+* duplicate messages
+* ordering assumptions
+* horizontal scaling
+* connection routing
+* fan-out architecture
+
+Do not require all realtime events to be globally ordered.
+
+Define ordering guarantees per entity where needed.
+
+---
+
+# REALTIME AUTHORIZATION
+
+The server must verify authorization for every realtime subscription and sensitive realtime message.
+
+Examples:
+
+* a rider may observe only their own active trip and permitted driver location
+* a driver may receive only offers assigned to that driver
+* an administrator may access only permissions explicitly granted
+* support users may access data according to case permissions
+
+Never rely on an opaque room/channel name as the security boundary.
+
+---
+
+# OFFLINE AND RECONNECTION MODEL
+
+Define the recovery model when:
+
+* rider loses connectivity
+* driver loses connectivity
+* WebSocket disconnects
+* mobile application backgrounding occurs
+* application restarts
+* client receives events out of order
+* client misses events
+* device clock differs from server time
+
+The server remains authoritative.
+
+Clients must reconcile with server state after reconnecting.
+
+Define recovery APIs or synchronization mechanisms for active rides.
+
+---
+
+# PRICING ARCHITECTURE
+
+Define a pricing subsystem capable of supporting:
+
+* base fare
+* time
+* distance
+* ride product
+* local rules
+* taxes
+* fees
+* promotions
+* minimum fares
+* cancellation charges
+* surge/dynamic pricing
+
+Define separate concepts for:
+
+* estimate
+* authorization amount
+* actual measured trip
+* final fare
+* adjustments
+* refund
+
+Pricing calculations must be deterministic for the same authoritative inputs and configuration version.
+
+Record enough information to reconstruct why a fare was produced.
+
+---
+
+# DYNAMIC PRICING ARCHITECTURE
+
+Define an architecture for surge/dynamic pricing without embedding demand calculation into the transactional trip service.
+
+Consider:
+
+* geographic zones
+* active demand
+* available driver supply
+* supply/demand ratios
+* pricing configuration
+* minimum/maximum modifiers
+* update frequency
+* cache lifetime
+* auditability
+* stale configuration
+* regional overrides
+
+Dynamic pricing calculations must degrade safely if the pricing-signal pipeline becomes unavailable.
+
+Never allow malformed external or operational configuration to produce invalid pricing.
+
+---
+
+# PAYMENT ARCHITECTURE
+
+Define the payment domain boundary.
+
+The architecture must include:
+
+* payment-method abstraction
+* provider abstraction
+* payment intent lifecycle
+* authorization
+* capture
+* refund
+* failure
+* retry
+* webhook handling
+* reconciliation
+* idempotency
+* provider reference identifiers
+
+Separate:
+
+* ride/trip state
+* fare state
+* payment state
+* payout state
+
+These lifecycles must not be collapsed into one status field.
+
+---
+
+# FINANCIAL CONSISTENCY
+
+Define how the system handles:
+
+* duplicate requests
+* duplicate webhooks
+* delayed webhooks
+* provider timeout after unknown outcome
+* capture failure
+* refund failure
+* partial operational failure
+* reconciliation discrepancies
+
+Financial operations must not rely on distributed locks alone.
+
+Use durable state transitions and provider references to recover from uncertain outcomes.
+
+---
+
+# EARNINGS ARCHITECTURE
+
+Define the relationship between:
+
+* fare
+* rider payment
+* platform fees
+* promotions
+* adjustments
+* driver earnings
+* payout eligibility
+* payout execution
+
+Driver earnings must not be inferred from current ride state after the fact without authoritative financial records.
+
+Define an immutable or append-oriented accounting approach where appropriate for financial auditability.
+
+---
+
+# EVENT ARCHITECTURE
+
+Define the event backbone.
+
+At minimum establish event domains for:
+
+* driver
+* vehicle
+* ride request
+* dispatch
+* trip
+* pricing
+* payment
+* earnings
+* payout
+* notification
+* safety
+* support
+* fraud/risk
+
+Define event envelope metadata including:
+
+* event ID
+* event type
+* event version
+* aggregate/entity ID
+* producer
+* event timestamp
+* correlation ID
+* trace context
+
+Define:
+
+* topic naming
+* partitioning strategy
+* retention
+* schema evolution
+* consumer group strategy
+* retry
+* dead-letter handling
+* replay strategy
+* privacy controls
+
+---
+
+# TRANSACTIONAL OUTBOX
+
+Define where transactional outbox patterns are required.
+
+At minimum evaluate use for state transitions where:
+
+* PostgreSQL transaction commits business state
+* an event must reliably become visible to downstream consumers
+
+Specify:
+
+* outbox ownership
+* transaction boundary
+* publishing mechanism
+* delivery state
+* retry
+* deduplication
+* cleanup/retention
+* monitoring
+
+Do not implement dual writes to PostgreSQL and Kafka without a recovery strategy.
+
+---
+
+# BACKGROUND PROCESSING
+
+Define BullMQ job domains and responsibilities.
+
+Potential job groups include:
+
+* notifications
+* receipts
+* payment retry/reconciliation
+* payout processing
+* compliance processing
+* fraud analysis
+* cleanup
+* analytics enrichment
+* scheduled operations
+
+Every job category must define:
+
+* source
+* payload
+* retry
+* timeout
+* backoff
+* concurrency
+* idempotency
+* dead-letter behavior
+* observability
+* shutdown behavior
+
+Do not put long-running CPU-heavy workloads into latency-sensitive API processes.
+
+---
+
+# EXTERNAL INTEGRATION ARCHITECTURE
+
+Define stable internal abstractions around:
+
+* mapping
+* routing
+* geocoding
+* payments
+* push notifications
+* email
+* SMS
+* identity/compliance providers
+* fraud providers
+* analytics providers where appropriate
+
+External providers must not leak their proprietary error models throughout the application.
+
+Map provider-specific failures into stable internal domain errors.
+
+Every external integration must define:
+
+* timeout
+* retry policy
+* rate-limit policy
+* authentication
+* observability
+* fallback
+* failure isolation
+* contract testing strategy
+
+---
+
+# AUTHENTICATION ARCHITECTURE
+
+Define authentication architecture for:
+
+* web
+* rider mobile
+* driver mobile
+* administrative users
+* internal services
+
+Specify:
+
+* identity lifecycle
+* access token model
+* refresh mechanism
+* revocation
+* session/device management
+* password handling if applicable
+* MFA extension points
+* suspicious-login handling
+* credential recovery
+* account lock/rate limiting
+
+Administrative authentication must have stronger security controls than ordinary rider authentication.
+
+---
+
+# AUTHORIZATION ARCHITECTURE
+
+Define a centralized permission model supporting:
+
+* rider permissions
+* driver permissions
+* support permissions
+* operations permissions
+* administrator permissions
+* service-to-service permissions
+
+Authorization must consider resource ownership.
+
+Examples:
+
+* riders may access only their own ride data
+* drivers may access only rides assigned or offered to them
+* support personnel may access data associated with authorized support cases
+* administrators may access according to explicit privilege
+
+Avoid a single coarse "admin" permission covering every administrative operation.
+
+---
+
+# DRIVER ONBOARDING ARCHITECTURE
+
+Define lifecycle states for driver compliance.
+
+Example categories may include:
+
+* pending
+* information required
+* submitted
+* under review
+* approved
+* rejected
+* suspended
+* expired
+
+Separate:
+
+* authentication status
+* compliance status
+* operational eligibility
+* vehicle eligibility
+
+A driver should not become dispatch-eligible solely because account registration succeeded.
+
+---
+
+# VEHICLE ARCHITECTURE
+
+Define vehicle data ownership and eligibility.
+
+Support:
+
+* vehicle registration
+* vehicle attributes
+* ride-product category
+* compliance documents
+* active/inactive state
+* driver association
+* regional eligibility
+
+Define how vehicle eligibility is evaluated at dispatch time without requiring large synchronous joins across unrelated services.
+
+---
+
+# SAFETY ARCHITECTURE
+
+Define:
+
+* emergency event flow
+* safety incident model
+* trusted-contact model
+* trip sharing
+* incident reporting
+* escalation
+* audit access
+* retention
+* privacy controls
+
+Safety workflows must remain available even when nonessential services are degraded.
+
+---
+
+# ADMINISTRATIVE ARCHITECTURE
+
+Define an isolated administrative surface and backend authorization model.
+
+Administrative functionality should support:
+
+* user lookup
+* driver lookup
+* trip investigation
+* payment investigation
+* compliance review
+* support workflows
+* fraud review
+* geographic configuration
+* pricing configuration
+* operational metrics
+* audit-log access
+
+Privileged mutations must require explicit authorization and produce audit events.
+
+---
+
+# ANALYTICS ARCHITECTURE
+
+Separate operational transactions from analytics workloads.
+
+Define how analytics events move from transactional systems into analytics/storage infrastructure without putting analytical query load on the primary transactional database.
+
+Consider:
+
+* Kafka events
+* event enrichment
+* analytical consumers
+* aggregation
+* dashboards
+* operational reporting
+* data retention
+
+Analytics must not become a synchronous dependency for trip execution.
+
+---
+
+# SEARCH ARCHITECTURE
+
+Where OpenSearch/Elasticsearch is used, define appropriate indexed entities such as:
+
+* users
+* drivers
+* vehicles
+* trips
+* support cases
+* administrative records
+
+Search indexes must be derived from authoritative data.
+
+Define:
+
+* indexing events
+* reindexing
+* consistency expectations
+* index versioning
+* failure recovery
+* access control
+
+---
+
+# MEDIA ARCHITECTURE
+
+Define secure object-storage flows for:
+
+* driver compliance documents
+* identity artifacts
+* receipts
+* support attachments
+
+Use pre-signed or controlled upload/download mechanisms where appropriate.
+
+The application should not proxy large files through API servers unnecessarily.
+
+Define:
+
+* upload authorization
+* content validation
+* private/public boundary
+* lifecycle
+* deletion
+* retention
+* audit access
+
+---
+
+# SECURITY ARCHITECTURE
+
+Define platform-wide security boundaries.
+
+At minimum address:
+
+* authentication
+* authorization
+* service-to-service authentication
+* secret management
+* TLS
+* network boundaries
+* API rate limits
+* WebSocket abuse
+* upload security
+* webhook verification
+* administrative security
+* audit logging
+* sensitive-data handling
+* encryption
+* key management
+* dependency security
+
+Define which controls belong at:
+
+* edge
+* application
+* domain
+* database
+* infrastructure
+
+Do not rely on a single layer.
+
+---
+
+# PRIVACY ARCHITECTURE
+
+Define privacy boundaries for:
+
+* user identity
+* driver identity
+* exact location
+* trip history
+* payment information
+* compliance documents
+* support conversations
+* safety incidents
+
+Define:
+
+* data minimization
+* access control
+* retention
+* deletion/anonymization
+* privileged access auditing
+* regional compliance extensibility
+
+---
+
+# FAILURE MODEL
+
+Explicitly define expected behavior for failure of:
+
+* PostgreSQL
+* Redis
+* Kafka
+* BullMQ workers
+* mapping provider
+* payment provider
+* notification provider
+* object storage
+* search
+* WebSocket gateway
+* external compliance provider
+
+For each critical dependency determine:
+
+* timeout
+* retry
+* fallback
+* circuit breaking where appropriate
+* stale-data tolerance
+* user-visible behavior
+* recovery process
+
+The failure of one noncritical dependency must not unnecessarily take down the complete ride lifecycle.
+
+---
+
+# CONSISTENCY MODEL
+
+For each major domain, classify data as requiring:
+
+* strong consistency
+* transactional consistency
+* eventual consistency
+* best-effort freshness
+
+At minimum evaluate:
+
+* ride assignment
+* trip state
+* payment state
+* driver location
+* driver availability
+* pricing configuration
+* search index
+* analytics
+* notifications
+
+Do not use eventual consistency where it can create financial loss or duplicate ride assignment.
+
+---
+
+# CONCURRENCY MODEL
+
+Define concurrency controls for:
+
+* duplicate ride requests
+* driver acceptance race
+* multiple dispatch workers
+* cancellation versus acceptance
+* trip start versus cancellation
+* completion versus cancellation
+* payment capture retries
+* refund retries
+* duplicate webhooks
+* driver status updates
+* compliance status changes
+
+Use appropriate mechanisms such as:
+
+* database transactions
+* unique constraints
+* optimistic concurrency
+* compare-and-set semantics
+* state-version checks
+* idempotency keys
+
+Do not make Redis locks the sole protection for authoritative business invariants.
+
+---
+
+# API ARCHITECTURE
+
+Define the major REST resource boundaries and responsibility.
+
+At minimum identify resource families for:
+
+* authentication
+* users
+* rider profiles
+* drivers
+* vehicles
+* compliance
+* ride estimates
+* ride requests
+* dispatch/driver offers
+* trips
+* locations where exposed
+* payments
+* payment methods
+* earnings
+* payouts
+* ratings
+* notifications
+* safety
+* support
+* administration
+
+Define:
+
+* authentication requirements
+* authorization requirements
+* pagination
+* filtering
+* idempotency
+* error structure
+* versioning strategy
+* OpenAPI ownership
+
+Do not prescribe every endpoint implementation here; establish stable architectural contracts and ownership.
+
+---
+
+# CLIENT ARCHITECTURE
+
+Define the high-level relationship between:
+
+* Next.js web
+* rider mobile application
+* driver mobile application
+* backend API
+* realtime gateway
+
+Establish that:
+
+* clients are not authoritative
+* client state may become stale
+* server state must be recoverable
+* realtime events supplement API state
+* authorization remains server-side
+* sensitive business rules execute on trusted backend components
+
+Define high-level client responsibilities without turning this prompt into a frontend or mobile implementation plan.
+
+---
+
+# OBSERVABILITY ARCHITECTURE
+
+Define platform-wide observability.
+
+Establish requirements for:
+
+* structured logs
+* metrics
+* traces
+* request correlation
+* event correlation
+* queue correlation
+* business metrics
+* infrastructure metrics
+* alerts
+
+At minimum trace critical flows end-to-end:
+
+* ride request → dispatch → acceptance → trip → completion
+* trip → pricing → payment
+* driver earnings → payout
+* compliance submission → verification → eligibility
+
+Never include secrets or unnecessary private data in telemetry.
+
+---
+
+# RELIABILITY ARCHITECTURE
+
+Define reliability objectives for critical capabilities.
+
+Identify appropriate SLO categories for:
+
+* API availability
+* ride-request creation
+* dispatch latency
+* realtime trip updates
+* payment processing
+* notification delivery
+* driver location ingestion
+
+Define degradation priorities.
+
+For example:
+
+* preserving authoritative trip state is more important than realtime visual freshness
+* preserving payment correctness is more important than immediate UI confirmation
+* preserving driver assignment correctness is more important than minimizing dispatch latency by a few milliseconds
+
+---
+
+# CAPACITY AND SCALING MODEL
+
+Define which workloads scale independently.
+
+At minimum consider independent scaling for:
+
+* HTTP API
+* WebSocket gateways
+* location ingestion
+* dispatch workers
+* BullMQ workers
+* Kafka consumers
+* notification workers
+* payment workers
+* analytics consumers
+* search ingestion
+
+Define likely bottlenecks and protection mechanisms.
+
+Do not design all traffic through a single synchronous backend process.
+
+---
+
+# MULTI-REGION DIRECTION
+
+Define the long-term regional architecture.
+
+Determine:
+
+* regional data ownership
+* routing strategy
+* geographic affinity
+* city/market partitioning
+* global identity considerations
+* cross-region events
+* disaster recovery
+* failover boundaries
+
+The architecture must distinguish between:
+
+* data that can be regional
+* data that must be global
+* data that may be replicated asynchronously
+
+Do not introduce active-active global writes for every table without a clear consistency model.
+
+---
+
+# ARCHITECTURAL DECISION RECORDS
+
+Document major decisions and their rationale.
+
+At minimum record decisions about:
+
+* modular monolith versus service decomposition
+* PostgreSQL ownership
+* Redis role
+* Kafka role
+* BullMQ role
+* geospatial architecture
+* dispatch partitioning
+* realtime architecture
+* payment boundaries
+* location retention
+* event delivery
+* transactional outbox
+* multi-region strategy
+* search architecture
+* object-storage security
+
+Each decision must explain:
+
+* problem
+* chosen approach
+* alternatives considered
+* rationale
+* operational implications
+* scaling implications
+* failure implications
+
+---
+
+# IMPLEMENTATION BOUNDARIES
+
+This architecture volume defines the system's foundational architecture.
+
+Do not use it to implement the entire application.
+
+Do not produce superficial placeholder code merely to demonstrate architecture.
+
+Focus on defining:
+
+* domains
+* responsibilities
+* service boundaries
+* data ownership
+* major APIs
+* event boundaries
+* queue boundaries
+* infrastructure relationships
+* consistency models
+* failure behavior
+* security boundaries
+* scaling strategy
+
+Implementation agents must later be able to use this architecture as a blueprint while still inspecting the actual repository before changing code.
+
+---
+
+# REQUIRED ARCHITECTURE DELIVERABLES
+
+Produce complete architectural documentation in the repository appropriate to the project's established documentation conventions.
+
+At minimum document:
+
+## SYSTEM CONTEXT
+
+Describe:
+
+* users
+* clients
+* platform
+* external providers
+* infrastructure dependencies
+* major data flows
+
+## CONTAINER/SERVICE VIEW
+
+Describe:
+
+* applications
+* backend components
+* workers
+* databases
+* caches
+* event infrastructure
+* search
+* object storage
+* external systems
+
+## DOMAIN MODEL
+
+Describe bounded contexts and responsibilities.
+
+## DATA OWNERSHIP MODEL
+
+Identify the authoritative owner of every major business entity.
+
+## API BOUNDARY MODEL
+
+Document major resource families and ownership.
+
+## EVENT MODEL
+
+Document event categories, ownership, envelope requirements, and consumers.
+
+## QUEUE MODEL
+
+Document background job families, ownership, retry behavior, and operational requirements.
+
+## REALTIME MODEL
+
+Document WebSocket responsibilities, authorization, subscriptions, reconnect behavior, and recovery.
+
+## GEOLOCATION MODEL
+
+Document location ingestion, storage, freshness, geospatial indexing, and privacy.
+
+## DISPATCH MODEL
+
+Document candidate discovery, ranking inputs, offer lifecycle, concurrency, assignment, and recovery.
+
+## FINANCIAL MODEL
+
+Document pricing, payment, earnings, payout boundaries, state transitions, and reconciliation.
+
+## SECURITY MODEL
+
+Document authentication, authorization, trust boundaries, secret management, and privileged operations.
+
+## PRIVACY MODEL
+
+Document sensitive data boundaries, retention, deletion, and access controls.
+
+## RELIABILITY MODEL
+
+Document failure handling, degradation, recovery, and disaster-recovery direction.
+
+## SCALING MODEL
+
+Document major scaling units, bottlenecks, partitioning, and capacity considerations.
+
+## OBSERVABILITY MODEL
+
+Document logs, metrics, traces, business telemetry, and critical end-to-end flows.
+
+---
+
+# VALIDATION REQUIREMENTS
+
+After producing the architecture, validate it against the repository.
+
+Verify that:
+
+* referenced technologies match the repository where already established
+* existing contracts are identified
+* proposed boundaries do not create impossible dependency cycles
+* data ownership is unambiguous
+* critical transactional operations have authoritative persistence
+* dispatch assignment has a concurrency strategy
+* payment state has an idempotency strategy
+* realtime communication has reconnect/recovery behavior
+* location processing has a scale and retention strategy
+* asynchronous workflows have retry/recovery behavior
+* external integrations have failure handling
+* security boundaries are explicit
+* privacy-sensitive data has defined access controls
+* observability covers critical workflows
+* scaling boundaries are identified
+* infrastructure responsibilities are identifiable
+* disaster-recovery implications are documented
+
+Do not declare the architecture complete if critical ownership or consistency decisions remain ambiguous.
+
+---
+
+# IMPLEMENTATION READINESS
+
+The resulting architecture must be detailed enough that implementation engineers can determine:
+
+* where a feature belongs
+* which component owns the data
+* which API boundary should expose it
+* whether the interaction is synchronous or asynchronous
+* which system is authoritative
+* how state transitions are protected
+* how failures are handled
+* how retries work
+* how realtime state is synchronized
+* how the feature is observed
+* how the feature scales
+* how privacy and authorization are enforced
+
+Do not leave architectural ownership to guesswork.
+
+---
+
+# IMPLEMENTATION DISCIPLINE
+
+Before making repository changes:
+
+1. Inspect the repository.
+2. Identify existing architecture and contracts.
+3. Preserve compatible implementation.
+4. Identify architecture that must be corrected for security, correctness, scalability, or consistency.
+5. Document architectural decisions clearly.
+6. Do not rewrite unrelated implementation.
+7. Do not introduce unnecessary technologies.
+8. Do not create duplicate sources of truth.
+9. Keep architecture aligned with the defined technology direction.
+10. Validate all documented relationships against the actual repository.
+
+---
+
+# PROHIBITED ARCHITECTURAL PRACTICES
+
+Never design the platform around:
+
+* a single globally mutable application state
+* direct cross-domain table mutation without justification
+* Redis as durable business truth
+* Kafka as current transactional truth
+* client state as authoritative
+* WebSocket delivery as authoritative
+* payment provider callbacks without idempotency
+* unlimited retries
+* synchronous dependency on every external integration
+* uncontrolled microservice proliferation
+* uncontrolled shared database access
+* undocumented privileged administrative access
+* permanent high-frequency location retention without justification
+* financial calculations based on unsafe floating point
+* architecture dependent on a previous AI response
+
+---
+
+# FINAL ARCHITECTURE REVIEW
+
+Before considering this architecture volume complete, verify that the blueprint can support the complete ride-hailing lifecycle:
+
+Rider:
+
+* authenticate
+* select pickup
+* select destination
+* obtain estimate
+* request ride
+* wait for dispatch
+* receive driver
+* observe driver
+* complete trip
+* pay
+* receive receipt
+* rate
+* review history
+* use support and safety features
+
+Driver:
+
+* authenticate
+* onboard
+* complete compliance
+* register vehicle
+* become eligible
+* go online
+* send location
+* receive offer
+* accept
+* navigate to pickup
+* arrive
+* start trip
+* complete trip
+* receive earnings
+* receive payout
+* use support and safety features
+
+Platform:
+
+* authenticate users
+* authorize access
+* discover drivers
+* dispatch correctly
+* maintain trip state
+* calculate pricing
+* process payment
+* account for earnings
+* deliver notifications
+* process events
+* process background jobs
+* provide operational administration
+* detect abuse
+* maintain observability
+* recover from partial failures
+* scale geographically
+
+Every one of these flows must have a clear architectural owner and source of truth.
+
+---
+
+# COMPLETION REPORT REQUIREMENTS
+
+When the architecture work is complete, report:
+
+## FILES CREATED
+
+List every architectural document created.
+
+## FILES MODIFIED
+
+List every repository file modified.
+
+## ARCHITECTURAL DECISIONS
+
+Summarize the major architectural decisions established.
+
+## DOMAIN OWNERSHIP
+
+Summarize domain and data ownership boundaries.
+
+## API CONTRACTS
+
+Summarize major API ownership and interaction patterns.
+
+## EVENT CONTRACTS
+
+Summarize event categories and delivery strategy.
+
+## QUEUE CONTRACTS
+
+Summarize queue/job categories and reliability behavior.
+
+## DATA ARCHITECTURE
+
+Summarize PostgreSQL, Redis, geospatial, search, and object-storage responsibilities.
+
+## REALTIME ARCHITECTURE
+
+Summarize WebSocket architecture and recovery behavior.
+
+## DISPATCH ARCHITECTURE
+
+Summarize matching, assignment, concurrency, and recovery strategy.
+
+## FINANCIAL ARCHITECTURE
+
+Summarize pricing, payments, earnings, payouts, reconciliation, and idempotency.
+
+## SECURITY
+
+Summarize trust boundaries, authentication, authorization, privileged operations, and sensitive-data protections.
+
+## PRIVACY
+
+Summarize location and identity privacy controls, retention, and access boundaries.
+
+## RELIABILITY
+
+Summarize failure handling, degradation, recovery, and disaster-recovery architecture.
+
+## SCALABILITY
+
+Summarize scaling boundaries, regional partitioning, and anticipated bottlenecks.
+
+## OBSERVABILITY
+
+Summarize logs, metrics, traces, alerts, and critical flow instrumentation.
+
+## VALIDATION
+
+Report:
+
+* repository inspection performed
+* architectural consistency validation
+* dependency/cycle review
+* data ownership review
+* concurrency review
+* security review
+* privacy review
+* reliability review
+* scalability review
+
+## UNRESOLVED ISSUES
+
+List only genuine architectural uncertainties or blockers that require resolution before implementation.
+
+Do not claim architectural completeness when critical ownership, consistency, or failure behavior remains undefined.
+
+---
+
+# FINAL ENGINEERING PRINCIPLE
+
+The architecture must define one coherent ride-hailing platform rather than a collection of independent features.
+
+The rider experience, driver experience, dispatch engine, trip lifecycle, pricing, financial systems, realtime systems, location infrastructure, event processing, infrastructure, and operational tooling must fit together through explicit contracts and authoritative ownership.
+
+Prioritize:
+
+* correctness
+* clear ownership
+* transactional integrity
+* concurrency safety
+* reliability
+* security
+* privacy
+* observability
+* scalability
+* recoverability
+* maintainability
+
+The repository remains the implementation source of truth.
+
+This architecture volume defines the foundational system structure that implementation work must follow while still requiring every implementation agent to inspect and respect the actual repository state before making changes.

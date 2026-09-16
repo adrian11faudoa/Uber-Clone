@@ -1,1377 +1,2003 @@
-You are operating in Senior Engineering Team Mode.
-
-Build the production-ready backend foundation for an enterprise-scale global ride-hailing, mobility, transportation, and delivery platform comparable in architectural scope to Uber.
-
-The platform is an original implementation.
-
-Do not copy proprietary source code, internal architecture, branding, confidential implementation details, proprietary algorithms, or private implementation details from Uber or any other company.
-
-This prompt is completely independent and may be executed in a separate conversation.
-
-The backend must follow the approved Uber-like architecture, domain boundaries, service ownership, database architecture, geospatial architecture, dispatch architecture, matching architecture, pricing architecture, payment architecture, security model, event architecture, queue architecture, and Project Index.
-
-Do not redesign the architecture.
-
-Do not generate frontend code.
-
-Do not generate mobile code.
-
-Do not generate infrastructure implementation code.
-
-Do not generate Terraform.
-
-Do not generate Kubernetes manifests.
+# UBER-STYLE RIDE-HAILING PLATFORM — BACKEND PROMPT — VOLUME 1
+
+## ROLE
+
+You are the senior backend engineering organization responsible for implementing the foundational backend platform for a production-grade ride-hailing and mobility marketplace comparable in product depth and operational sophistication to Uber.
+
+Operate as a coordinated team consisting of:
+
+* Principal Software Architect
+* Staff Backend Engineer
+* Database Architect
+* Distributed Systems Engineer
+* Security Engineer
+* Performance Engineer
+* Reliability Engineer
+* QA Engineer
+* DevOps Engineer
+* Technical Writer
+
+You are implementing production software against the existing repository.
+
+You are not creating a tutorial, prototype, mock backend, or educational example.
+
+Implement complete, connected, production-grade backend functionality using the project's established architecture, contracts, conventions, and technology direction.
+
+The repository is the source of truth for what currently exists.
+
+Do not assume that another AI prompt or previous conversation is available.
 
-Do not generate CI/CD workflows.
+---
 
-────────────────────────────────────────
+# PROJECT
 
-MISSION
+Implement the foundational backend platform for an Uber-style ride-hailing system using:
+
+* NestJS
+* TypeScript
+* PostgreSQL
+* Prisma
+* Redis
+* BullMQ
+* Kafka or compatible event streaming
+* REST APIs
+* WebSockets where required
+* OpenAPI/Swagger
+* OpenTelemetry-compatible observability
+
+The backend must provide the durable foundation for:
+
+* identity
+* authentication
+* authorization
+* riders
+* drivers
+* driver onboarding
+* compliance
+* vehicles
+* availability
+* foundational geolocation
+* ride requests
+* trip lifecycle
+* pricing
+* payments
+* earnings
+* payouts
+* ratings
+* notifications
+* safety
+* fraud/risk
+* support
+* administration
+* asynchronous processing
+* events
+* observability
+
+This volume is responsible for establishing the backend application foundation, shared infrastructure, identity/security foundations, rider and driver domains, vehicle/compliance foundations, and the durable primitives required by later backend functionality.
+
+Do not implement unrelated later-domain functionality merely because it is mentioned in the project scope.
+
+---
+
+# SOURCE OF TRUTH
+
+Before changing code:
+
+Inspect the repository comprehensively.
+
+Determine:
+
+* workspace/package structure
+* backend application location
+* NestJS modules
+* Prisma schema
+* existing migrations
+* Redis integration
+* BullMQ integration
+* Kafka/event integration
+* authentication implementation
+* authorization implementation
+* API conventions
+* WebSocket implementation
+* shared libraries
+* error handling
+* configuration
+* logging
+* observability
+* testing
+* CI/CD
+* existing infrastructure
+* existing frontend/mobile contracts
+
+Preserve existing working behavior.
+
+Reuse compatible infrastructure rather than creating parallel implementations.
+
+Do not regenerate unchanged files.
 
-Build the production-ready backend foundation required for:
+Do not replace established repository patterns solely for stylistic preference.
 
-• API Gateway
-• Application bootstrap
-• Configuration
-• Request context
-• Structured logging
-• Error handling
-• Validation
-• Authentication foundation
-• Authorization foundation
-• PostgreSQL
-• Prisma
-• PostGIS
-• Redis
-• Kafka/Redpanda
-• BullMQ
-• WebSockets
-• Socket.IO
-• OpenTelemetry
-• Metrics
-• Health checks
-• Graceful shutdown
-• API contracts
-• Event contracts
-• Queue contracts
-• Testing foundation
-• Local development
+If foundational backend functionality is missing, implement it completely.
 
-This volume establishes the backend platform required by all later mobility domains.
+If an existing implementation is insecure, incorrect, or incompatible with the project's architecture, correct it as part of the relevant scope and document the compatibility impact.
+
+---
+
+# BACKEND SCOPE
+
+This prompt is responsible for implementing:
+
+* NestJS backend foundation
+* configuration architecture
+* database integration
+* Redis integration
+* common request/error infrastructure
+* authentication
+* session/token lifecycle
+* authorization
+* user accounts
+* rider profiles
+* driver profiles
+* driver onboarding state
+* driver compliance foundations
+* compliance evidence metadata
+* vehicle management
+* vehicle eligibility foundations
+* driver availability foundations
+* initial geolocation infrastructure contracts
+* audit infrastructure
+* foundational event infrastructure
+* foundational queue infrastructure
+* backend observability
+* rate limiting foundations
+* security middleware/guards
+* automated tests for all implemented functionality
 
-The complete backend must eventually support:
+This prompt does not own the full dispatch engine, full ride-matching algorithm, complete payment orchestration, advanced pricing engine, full trip orchestration, or production infrastructure deployment unless the repository already places a required foundational component inside this scope.
 
-• Riders
-• Drivers
-• Driver onboarding
-• Driver verification
-• Vehicles
-• Availability
-• Real-time location
-• Geospatial matching
-• Dispatch
-• Ride requests
-• Trips
-• Scheduled rides
-• Multi-stop trips
-• Shared rides
-• Pricing
-• Surge
-• Promotions
-• Payments
-• Wallets
-• Earnings
-• Incentives
-• Payouts
-• Ratings
-• Messaging
-• Notifications
-• Safety
-• Fraud
-• Support
-• Business accounts
-• Analytics
-• Administration
-• Multi-region operation
+Those later systems must consume the contracts established here rather than creating incompatible parallel foundations.
 
-────────────────────────────────────────
+---
 
-PRIMARY TECHNOLOGY STACK
+# ARCHITECTURAL RESPONSIBILITIES
+
+The backend must enforce clear domain boundaries.
 
-Backend:
+At minimum establish independent modules or equivalent boundaries for:
 
-• Node.js
-• NestJS
-• TypeScript
+* Identity
+* Authentication
+* Authorization
+* Users
+* Riders
+* Drivers
+* Compliance
+* Vehicles
+* Availability
+* Location
+* Audit
+* Infrastructure
 
-Database:
+The exact physical module structure must follow the repository where a compatible implementation already exists.
 
-• PostgreSQL
-• Prisma ORM
-• PostGIS
+Do not create an artificial microservice topology solely for organizational purposes.
 
-Cache:
+The immediate goal is a clean backend foundation that can scale into the complete distributed system without requiring uncontrolled rewrites.
 
-• Redis
+---
 
-Event Streaming:
+# APPLICATION FOUNDATION
 
-• Kafka or Redpanda
+Establish or preserve a production NestJS application foundation including:
 
-Background Processing:
+* application bootstrap
+* environment configuration
+* configuration validation
+* module composition
+* global validation
+* global exception handling
+* request correlation
+* structured logging
+* security middleware
+* health/readiness architecture
+* graceful shutdown
+* dependency injection conventions
+* API versioning where applicable
+* OpenAPI integration
+* test infrastructure
 
-• BullMQ
+Global infrastructure must not hide domain logic.
 
-Real-Time:
+---
 
-• WebSockets
-• Socket.IO
+# CONFIGURATION
 
-Maps:
+Create a strongly typed configuration system.
 
-• Google Maps Platform or approved provider abstraction
+Configuration must distinguish:
 
-Payments:
+* application settings
+* database settings
+* Redis settings
+* Kafka settings
+* queue settings
+* authentication settings
+* token settings
+* rate limits
+* external provider configuration
+* observability settings
+* environment metadata
 
-• Stripe or approved payment abstraction
+Validate configuration on application startup.
 
-Notifications:
+Invalid production-critical configuration must cause a controlled startup failure rather than allowing the service to start with unsafe defaults.
 
-• Firebase Cloud Messaging
-• Apple Push Notification Service
-• Email/SMS provider abstractions
+Do not hardcode:
 
-Object Storage:
+* credentials
+* API keys
+* signing secrets
+* database passwords
+* provider secrets
+* encryption keys
 
-• AWS S3-compatible storage
+Provide safe local-development defaults only for non-secret infrastructure where appropriate.
 
-Observability:
+---
 
-• OpenTelemetry
-• Prometheus
-• Grafana
-• Loki
-• Tempo
+# DATABASE FOUNDATION
 
-Testing:
+Implement the PostgreSQL/Prisma persistence foundation.
 
-• Jest
-• Supertest
-• Integration testing tools
+Requirements:
 
-────────────────────────────────────────
+* Prisma client integration
+* controlled connection lifecycle
+* transaction support
+* safe shutdown
+* migration integration
+* database health checks
+* query instrumentation
+* consistent error mapping
+* test database strategy
 
-IMPLEMENTATION RULES
+Configure the Prisma client to prevent uncontrolled connection growth.
 
-Never generate pseudo-code.
+Do not create a new database connection per request.
 
-Never generate placeholders.
+Support transaction boundaries explicitly in application services.
 
-Never generate TODO comments.
+---
 
-Never omit implementations.
+# DATABASE ENGINEERING
 
-Never say:
+Create or evolve models for foundational entities as required by the repository architecture.
 
-- "implement similarly"
-- "left as an exercise"
-- "for brevity"
-- "remaining code omitted"
+At minimum support durable data for:
 
-Every generated file must be complete.
-
-Every generated file must compile.
-
-Never regenerate unchanged files.
-
-Only modify existing files when required.
-
-Use strict TypeScript.
-
-Use dependency injection.
-
-Keep controllers thin.
-
-Keep domain logic outside controllers.
-
-Use repositories for persistence.
-
-Use DTOs for external contracts.
-
-Use centralized validation.
-
-Use centralized error handling.
-
-Use structured logging.
-
-Use safe timeout and retry policies.
-
-Use idempotency where requests may be retried.
-
-Use the established observability infrastructure.
-
-────────────────────────────────────────
-
-BACKEND ARCHITECTURE
+* users
+* authentication/session state where durable storage is required
+* rider profiles
+* driver profiles
+* driver compliance state
+* compliance evidence metadata
+* vehicles
+* vehicle eligibility
+* availability state where durable representation is required
+* audit records
+* idempotency records where applicable
 
 Use:
 
-• Clean Architecture
-• Domain-Driven Design
-• SOLID
-• Repository Pattern
-• Service Layer
-• Dependency Injection
-• Feature-first organization
-• Explicit domain ownership
-• CQRS where justified
-• Event-driven communication where appropriate
-• Transactional Outbox where appropriate
-• Idempotent consumers
-• Stateless services where possible
-
-Do not create unnecessary microservices.
-
-The implementation must permit future service extraction.
-
-────────────────────────────────────────
-
-MONOREPO BACKEND FOUNDATION
-
-Create the backend structure required by the approved architecture.
-
-Support:
-
-apps/
-
-• API Gateway
-
-services/
-
-Prepare service boundaries for:
-
-• Identity
-• Accounts
-• Profiles
-• Sessions
-• Devices
-• Riders
-• Drivers
-• Driver Onboarding
-• Driver Verification
-• Vehicles
-• Availability
-• Location
-• Geospatial
-• Maps
-• Routing
-• ETA
-• Ride Requests
-• Dispatch
-• Matching
-• Driver Offers
-• Trips
-• Scheduled Trips
-• Shared Trips
-• Pricing
-• Surge
-• Promotions
-• Payments
-• Wallets
-• Refunds
-• Earnings
-• Incentives
-• Payouts
-• Ratings
-• Messaging
-• Notifications
-• Safety
-• Fraud
-• Support
-• Business Accounts
-• Analytics
-• Administration
-
-workers/
-
-• Background workers
-• Scheduled jobs
-• Event consumers
-
-packages/
-
-• Configuration
-• Logging
-• Errors
-• Validation
-• Database
-• Redis
-• Events
-• Queues
-• Observability
-• API contracts
-• Geospatial interfaces
-• Maps interfaces
-• Payment interfaces
-• Testing utilities
-
-────────────────────────────────────────
-
-APPLICATION BOOTSTRAP
+* primary keys
+* foreign keys
+* uniqueness constraints
+* appropriate check constraints where Prisma/PostgreSQL support the required semantics
+* indexes based on actual query patterns
+* created/updated timestamps
+* explicit state fields
+* appropriate soft-delete/anonymization strategy
 
-Implement NestJS application initialization.
+Do not introduce unrestricted JSON blobs where normalized fields are required for transactional behavior.
 
-Support:
+---
 
-• Environment loading
-• Configuration
-• Global validation
-• Global exception handling
-• Structured logging
-• Request IDs
-• Correlation IDs
-• Trace IDs
-• Secure headers
-• CORS
-• Request-size limits
-• API versioning
-• Graceful shutdown
-• Health checks
-• OpenAPI
+# USER IDENTITY MODEL
 
-Use production-safe defaults.
+Implement a canonical user identity model.
 
-────────────────────────────────────────
+A user must represent the authenticated account independently from product-specific role data.
 
-CONFIGURATION
+Support appropriate attributes for:
 
-Implement centralized strongly typed configuration.
+* identity identifier
+* email where applicable
+* phone where applicable
+* account status
+* verification state
+* locale
+* timezone
+* created timestamp
+* updated timestamp
+* deletion/anonymization state
 
-Support:
+Do not duplicate credentials into rider and driver tables.
 
-APPLICATION
+The user identity must be reusable by:
 
-• Environment
-• Service name
-• Version
-• Host
-• Port
+* rider
+* driver
+* support
+* operations
+* administrator
 
-POSTGRESQL
+while authorization determines actual privileges.
 
-• Host
-• Port
-• Database
-• Username
-• Password
-• SSL/TLS
-• Connection pool
+---
 
-POSTGIS
+# ACCOUNT STATES
 
-• Spatial database configuration
-• Geographic settings
+Implement explicit account security/availability states as required.
 
-REDIS
+Examples may include:
 
-• Host
-• Port
-• Username
-• Password
-• TLS
+* active
+* pending verification
+* restricted
+* suspended
+* disabled
+* deleted/anonymized
 
-KAFKA / REDPANDA
+Define legal transitions.
 
-• Brokers
-• Client ID
-• Authentication
-• TLS
-• Consumer groups
+Sensitive administrative state changes must be auditable.
 
-BULLMQ
+A disabled user must not be able to authenticate merely because an old access token remains technically valid.
 
-• Redis configuration
-• Retry defaults
-• Queue defaults
+---
 
-MAPS
+# AUTHENTICATION
 
-• Provider
-• API credentials
-• Request timeout
-• Regional provider configuration
+Implement secure authentication for the backend.
 
-PAYMENTS
+The implementation must support the credential mechanisms established by the repository and must provide a clean architecture for:
 
-• Provider configuration
-• Webhook configuration
+* registration
+* login
+* logout
+* access-token issuance
+* refresh
+* revocation
+* account recovery
+* credential rotation
+* session/device management where applicable
 
-NOTIFICATIONS
-
-• FCM
-• APNS
-• Email/SMS configuration
-
-OBSERVABILITY
-
-• Log level
-• OpenTelemetry endpoint
-• Metrics configuration
-
-Never hard-code secrets.
-
-Never access process.env throughout domain modules.
-
-Validate all required configuration at startup.
-
-Fail fast for invalid configuration.
-
-────────────────────────────────────────
-
-REQUEST CONTEXT
-
-Implement reusable context containing:
-
-• Request ID
-• Correlation ID
-• Trace ID
-• Service
-• Environment
-• User ID
-• Driver ID where authenticated
-• Rider ID where authenticated
-• Device ID
-• Region
-• City/service-area context where appropriate
-
-Propagate context to:
-
-• Logs
-• Metrics
-• Traces
-• Kafka events
-• Background jobs
-• External requests
-
-────────────────────────────────────────
-
-LOGGING
-
-Implement structured JSON logging.
-
-Support:
-
-• Timestamp
-• Service
-• Environment
-• Log level
-• Request ID
-• Correlation ID
-• Trace ID
-• Operation
-• Duration
-• Result
-• Safe error information
-
-Never log:
-
-• Passwords
-• Access tokens
-• Refresh tokens
-• Payment secrets
-• Private keys
-• Database credentials
-• Full payment information
-• Unnecessary precise user location
-
-────────────────────────────────────────
-
-ERROR HANDLING
-
-Implement centralized API error handling.
-
-Define errors for:
-
-• Validation
-• Authentication
-• Authorization
-• Not found
-• Conflict
-• Rate limit
-• Dependency unavailable
-• External-provider failure
-• Geospatial failure
-• Dispatch failure
-• Payment failure
-• Internal error
-
-Use a consistent error response:
-
-• Error code
-• Public-safe message
-• Request ID
-• Correlation ID
-• Validation details where appropriate
-
-Never expose stack traces in production responses.
-
-────────────────────────────────────────
-
-VALIDATION
-
-Implement centralized validation for:
-
-• Request bodies
-• Query parameters
-• Path parameters
-• Headers
-• Configuration
-• Event payloads
-• Queue payloads
-• Webhook payloads
-• Location coordinates
-
-Validate geographic values:
-
-• Latitude
-• Longitude
-• Accuracy
-• Timestamp
-• Speed where applicable
-• Heading where applicable
-
-Reject clearly impossible input.
-
-────────────────────────────────────────
-
-SECURITY FOUNDATION
-
-Implement:
-
-• Authentication guards
-• Authorization guards
-• RBAC foundation
-• Permission foundation
-• Rate limiting foundation
-• Secure headers
-• CORS
-• Secret boundaries
-• Audit hooks
-
-Prepare for:
-
-• Password authentication
-• OAuth
-• MFA
-• Passkeys
-• Device authentication
-• Session management
+Use secure password hashing when passwords are part of the selected authentication method.
 
 Never store plaintext passwords.
 
-────────────────────────────────────────
+Never place secrets or raw credentials into logs.
 
-API FOUNDATION
+---
 
-Implement reusable REST API infrastructure.
+# TOKEN ARCHITECTURE
 
-Support:
+If JWT-based authentication is used, implement a secure lifecycle for:
 
-• API versioning
-• Request validation
-• Response conventions
-• Error conventions
-• Pagination
-• Cursor pagination
-• Authentication
-• Authorization
-• Rate limiting
-• OpenAPI
-• Request tracing
-• Timeout handling
-• Cancellation
-• Idempotency
+* short-lived access tokens
+* protected refresh tokens
+* token rotation where appropriate
+* revocation
+* replay detection where required
+* issuer/audience validation
+* expiration
+* signing-key configuration
 
-Create reusable abstractions for:
+Do not trust decoded token claims without signature and validity verification.
 
-• Idempotency keys
-• Resource versioning
-• Optimistic concurrency
-• Safe retries
+Do not place unnecessary sensitive information into tokens.
 
-────────────────────────────────────────
+The backend must enforce authorization independently of frontend/mobile claims.
 
-DATABASE FOUNDATION
+---
 
-Implement PostgreSQL integration using Prisma.
+# SESSION AND DEVICE SECURITY
 
-Support:
+Where session storage is used, establish a durable or controlled representation for:
 
-• Prisma client lifecycle
-• Connection handling
-• Health checks
-• Graceful shutdown
-• Transactions
-• Error translation
-• Query logging controls
-• Migration structure
-
-Prepare for:
-
-• PostgreSQL
-• PostGIS
-• Read replicas
-• Connection pooling
-• Partitioning
-
-Do not create all domain models in this volume.
-
-────────────────────────────────────────
-
-PRISMA FOUNDATION
-
-Define conventions for:
-
-• IDs
-• Timestamps
-• Soft deletion where justified
-• Optimistic concurrency
-• Foreign keys
-• Constraints
-• Composite indexes
-• Decimal monetary values
-
-Prepare service/domain ownership boundaries.
-
-Do not allow unrestricted cross-domain writes.
-
-────────────────────────────────────────
-
-POSTGIS FOUNDATION
-
-Implement database-level PostGIS support.
-
-Prepare utilities for:
-
-• Point
-• Polygon
-• MultiPolygon
-• Spatial reference system
-• Distance queries
-• Bounding boxes
-• Spatial indexes
-
-Define conventions for:
-
-• WGS84 coordinates
-• Geometry/geography usage
-• Spatial indexes
-• Precision
-
-PostGIS is authoritative for durable geospatial entities such as:
-
-• Service areas
-• Geofences
-• Airport zones
-• Operational polygons
-
-Do not use PostGIS as the high-frequency transient driver-location store.
-
-────────────────────────────────────────
-
-REDIS FOUNDATION
-
-Implement reusable Redis infrastructure.
+* session identifier
+* user
+* device/client context
+* issued time
+* expiration
+* revocation
+* last-use metadata as appropriate
 
 Support:
 
-• Connection management
-• TLS
-• Authentication
-• Health checks
-• Graceful shutdown
-• Namespaced keys
-• Serialization
-• TTL
-• Cache abstraction
-• Distributed short-lived lease abstraction
-• Idempotency
-• Geospatial primitives where appropriate
+* logout from current session
+* revocation of compromised sessions
+* controlled session expiration
 
-Prepare for:
+Do not create unbounded session records without retention policies.
 
-• Driver availability
-• Driver location
-• Candidate pools
-• ETA caching
-• Rate limiting
-• WebSocket coordination
-• Dispatch state
-• Notification deduplication
+---
 
-Redis must never be authoritative for:
+# ACCOUNT RECOVERY
 
-• Trips
-• Payments
-• Wallets
-• Earnings
-• Payouts
-• Driver identity
-• Rider identity
-• Historical financial data
+Implement secure account recovery architecture.
 
-────────────────────────────────────────
+Requirements include:
 
-REDIS KEY CONVENTIONS
+* expiring recovery tokens
+* one-time use
+* secure token storage or hashing
+* rate limiting
+* generic user-facing responses where enumeration would be harmful
+* auditability
+* session invalidation after sensitive credential reset where appropriate
 
-Create standardized key namespaces.
+Do not expose whether an arbitrary email or phone belongs to an account unless product requirements explicitly justify it.
+
+---
+
+# AUTHORIZATION MODEL
+
+Implement server-side authorization foundations.
+
+Support role and permission concepts appropriate to:
+
+* rider
+* driver
+* support
+* operations
+* administrator
+* internal service
+
+Authorization must include resource ownership.
 
 Examples:
 
-• availability:
-• location:
-• dispatch:
-• matching:
-• trip:
-• websocket:
-• idempotency:
-• rate-limit:
-• notification:
+* rider access must be limited to the rider's own resources
+* driver access must be limited to the driver's own resources and explicitly assigned resources
+* support access must require appropriate case/operational permission
+* administrative privileges must be explicit
 
-Keys must include appropriate:
+Do not implement a single uncontrolled `isAdmin` boolean as the complete authorization system.
 
-• Environment
-• Region
-• Entity scope
+---
 
-Define:
+# AUTHORIZATION GUARDS
 
-• TTL
-• Serialization
-• Invalidation
-• Ownership
+Create reusable authorization mechanisms for NestJS such as:
 
-────────────────────────────────────────
+* authentication guards
+* role/permission guards
+* resource ownership checks
+* service-level authorization helpers
 
-KAFKA / REDPANDA FOUNDATION
+Controller guards alone are insufficient when business logic can be invoked through other application pathways.
 
-Implement reusable event-streaming infrastructure.
+Critical authorization decisions must also exist inside appropriate application services/domain boundaries.
+
+---
+
+# USER ENUMERATION PROTECTION
+
+Protect authentication and recovery flows against account enumeration.
+
+Responses must not unnecessarily disclose whether:
+
+* an email exists
+* a phone exists
+* an account is disabled
+* a driver exists
+
+when the operation does not require that disclosure.
+
+Internal logs may contain controlled diagnostic context subject to privacy rules.
+
+---
+
+# RATE LIMITING FOUNDATION
+
+Implement reusable Redis-backed rate limiting for security-sensitive APIs.
+
+At minimum support limits for:
+
+* registration
+* login
+* password reset
+* verification attempts
+* token refresh
+* sensitive profile mutations
+* administrative authentication
+
+The rate-limit implementation must define:
+
+* key strategy
+* TTL
+* maximum attempts
+* response behavior
+* identity/IP combination where appropriate
+* Redis failure behavior
+
+Do not disable rate limits silently because Redis is unavailable.
+
+Where Redis is unavailable, choose an explicit safe failure/degradation strategy suitable to the operation.
+
+---
+
+# REQUEST CORRELATION
+
+Every HTTP request should have a correlation/request identifier.
+
+Implement middleware/interceptors that:
+
+* accept a validated client request ID where safe
+* otherwise generate one
+* propagate it through application logging
+* attach it to responses
+* integrate it with tracing
+* propagate it to relevant asynchronous jobs/events
+
+Do not trust arbitrary trace identifiers without validation.
+
+---
+
+# ERROR MODEL
+
+Create a consistent backend error model.
+
+Errors must distinguish appropriate categories such as:
+
+* validation
+* authentication
+* authorization
+* not found
+* conflict
+* business rule violation
+* rate limiting
+* dependency failure
+* timeout
+* internal error
+
+Responses must not leak:
+
+* stack traces
+* SQL statements
+* internal hostnames
+* secrets
+* provider credentials
+* sensitive personal information
+
+Map lower-level errors to stable API semantics.
+
+---
+
+# VALIDATION
+
+Use server-side validation for all external input.
+
+Validate:
+
+* request bodies
+* query parameters
+* path parameters
+* headers where business-critical
+* pagination
+* identifiers
+* dates
+* timezones
+* coordinates
+* uploaded metadata where applicable
+
+Reject unexpected fields where strict validation is appropriate.
+
+Do not depend on frontend validation for security.
+
+---
+
+# PAGINATION
+
+Establish consistent pagination utilities.
+
+For potentially large collections, prefer cursor-based pagination when appropriate.
+
+Prevent:
+
+* unbounded result sets
+* unrestricted sort fields
+* arbitrary database expressions
+* expensive unrestricted offset queries on high-volume tables
+
+Allow only approved sortable/filterable fields.
+
+---
+
+# USERS MODULE
+
+Implement the user domain foundation.
+
+Required capabilities include:
+
+* retrieving the authenticated user
+* profile retrieval
+* safe account updates
+* account status inspection
+* controlled account deletion/deactivation
+* privacy-conscious output mapping
+
+Do not return internal fields or security metadata unnecessarily.
+
+Separate internal persistence entities from public response DTOs.
+
+---
+
+# RIDER DOMAIN
+
+Implement the rider profile foundation.
 
 Support:
 
-• Producer lifecycle
-• Consumer lifecycle
-• Topic configuration
-• Consumer groups
-• Serialization
-• Event IDs
-• Event versions
-• Correlation IDs
-• Causation IDs where appropriate
-• Retry
-• Dead-letter handling
-• Graceful shutdown
+* rider profile creation
+* profile retrieval
+* profile update
+* preferences where appropriate
+* locale/timezone
+* accessibility preferences where relevant
+* notification preferences where appropriate
 
-Event envelope:
+Rider profile data must remain separate from:
 
-• Event ID
-• Event type
-• Event version
-• Aggregate type
-• Aggregate ID
-• Region
-• Timestamp
-• Correlation ID
-• Causation ID where appropriate
-• Producer
-• Payload
+* authentication credentials
+* ride state
+* payment state
+* driver state
 
-Do not implement the full domain event catalog yet.
+Do not allow rider profile updates to mutate unrelated domains.
 
-────────────────────────────────────────
+---
 
-TRANSACTIONAL OUTBOX
+# DRIVER DOMAIN
 
-Implement reusable outbox infrastructure.
+Implement the driver profile foundation.
 
 Support:
 
-• Outbox ID
-• Event type
-• Event version
-• Aggregate type
-• Aggregate ID
-• Region
-• Payload
-• Status
-• Retry count
-• Next retry timestamp
-• Published timestamp
-• Error information
-• Created timestamp
+* driver creation
+* driver profile retrieval
+* profile update
+* driver operational status
+* regional information
+* eligibility relationship
+* account restrictions
 
-Ensure domain transactions and event publication remain consistent.
+A driver profile must not automatically imply:
 
-Support recovery when:
+* compliance approval
+* vehicle eligibility
+* dispatch eligibility
+* online availability
 
-• Database transaction succeeds
-• Kafka publication fails
+These are separate concepts.
 
-Publishing must be retryable and idempotent.
+---
 
-────────────────────────────────────────
+# DRIVER ONBOARDING
 
-BULLMQ FOUNDATION
+Implement explicit onboarding state.
 
-Implement reusable asynchronous job infrastructure.
+The backend must support workflow stages appropriate to the repository and project architecture.
+
+Examples:
+
+* started
+* information_required
+* submitted
+* under_review
+* approved
+* rejected
+* suspended
+
+Separate onboarding progress from final operational eligibility.
+
+State changes must validate:
+
+* authorized actor
+* current state
+* required information
+* transition rules
+
+---
+
+# COMPLIANCE DOMAIN
+
+Implement foundational compliance models and service boundaries.
+
+Support metadata for:
+
+* requirement type
+* jurisdiction/market
+* document/evidence type
+* submission status
+* verification status
+* expiration
+* reviewer or provider reference where appropriate
+* rejection reason
+* timestamps
+
+Do not store sensitive document binary content directly in PostgreSQL when object storage is more appropriate.
+
+Persist metadata and secure object references.
+
+---
+
+# COMPLIANCE STATE
+
+Compliance must have explicit state.
+
+Example conceptual states:
+
+* not_started
+* required
+* submitted
+* under_review
+* approved
+* rejected
+* expired
+* suspended
+
+The exact repository conventions may differ, but state transitions must be explicit and auditable.
+
+Do not encode compliance with uncontrolled booleans such as:
+
+`isVerified = true`
+
+without preserving the underlying workflow state and evidence context.
+
+---
+
+# COMPLIANCE AUTHORIZATION
+
+Only authorized actors may:
+
+* submit compliance evidence
+* review evidence
+* approve
+* reject
+* suspend
+* reinstate
+
+Driver self-service actions must never be able to set final approval states.
+
+Administrative changes must generate audit records.
+
+---
+
+# VEHICLE DOMAIN
+
+Implement vehicle management.
 
 Support:
 
-• Queue registration
-• Producer
-• Worker
-• Job IDs
-• Retry
-• Exponential backoff
-• Timeouts
-• Concurrency
-• Failure handling
-• Dead-letter behavior
-• Graceful shutdown
-• Metrics
+* vehicle creation
+* vehicle retrieval
+* vehicle update
+* vehicle activation/deactivation
+* driver association where appropriate
+* ride-category metadata
+* market eligibility metadata
+* compliance relationships
 
-Prepare queues for:
+Prevent unauthorized users from accessing another driver's vehicles.
 
-• Driver verification
-• Scheduled rides
-• Notifications
-• Receipts
-• Payment reconciliation
-• Payout processing
-• Fraud analysis
-• Support
-• Analytics
-• Cleanup
+Enforce ownership at the application/domain boundary.
 
-Do not implement full domain jobs in this volume.
+---
 
-────────────────────────────────────────
+# VEHICLE ELIGIBILITY
 
-WEBSOCKET FOUNDATION
+Separate vehicle existence from vehicle eligibility.
 
-Implement production-ready WebSocket infrastructure.
+Eligibility may depend on:
 
-Support:
+* vehicle type
+* model/year rules
+* jurisdiction
+* compliance documents
+* active state
+* driver relationship
 
-• Connection establishment
-• Authentication
-• Authorization
-• Heartbeats
-• Reconnection
-• Disconnect handling
-• Connection metadata
-• Region awareness
-• Room/channel abstraction
-• Rate limiting
-• Backpressure
+Create an explicit service boundary for eligibility decisions so dispatch can later consume it without embedding vehicle rules into dispatch logic.
 
-Prepare channels for:
+---
 
-• Driver location
-• Trip tracking
-• Dispatch offers
-• Trip state
-• Messaging
-• Notifications
+# DRIVER-VEHICLE RELATIONSHIP
 
-Do not implement full dispatch or location logic in this volume.
+Define whether:
 
-────────────────────────────────────────
+* one driver may own multiple vehicles
+* one vehicle may be assigned to one driver at a time
+* temporary vehicle assignments are supported
 
-SOCKET.IO FOUNDATION
+The implementation must enforce the repository's selected invariant at the database level where practical.
 
-Where Socket.IO is approved:
+Do not allow concurrent application requests to produce impossible relationships.
 
-Implement:
+---
 
-• Gateway lifecycle
-• Authentication middleware
-• Connection tracking
-• Room abstraction
-• Event validation
-• Error handling
-• Heartbeats
-• Rate limiting
-• Graceful shutdown
+# DRIVER AVAILABILITY FOUNDATION
 
-Prepare horizontal scaling using Redis coordination.
+Implement the durable model and service boundary needed for driver operational availability.
 
-────────────────────────────────────────
+Support state concepts such as:
 
-HEALTH CHECKS
+* offline
+* available
+* unavailable
+* restricted
+* on_trip
 
-Implement:
+The exact active-trip state may remain owned by the future trip domain, but the availability abstraction must be designed so later dispatch and trip functionality can integrate without redesigning it.
 
-• Liveness
-• Readiness
-• Startup health where appropriate
+Do not treat a simple `online = true` flag as sufficient for the complete driver state.
 
-Support checks for:
+---
 
-• PostgreSQL
-• Redis
-• Kafka
-• BullMQ infrastructure
-• PostGIS
-• Maps dependency where appropriate
+# LOCATION FOUNDATION
 
-Do not make liveness depend on every external dependency.
+Implement the foundational location boundary without building the complete dispatch system.
+
+At minimum define and validate:
+
+* latitude
+* longitude
+* location timestamp
+* driver identity
+* source/device context where required
+* coordinate validity
+* timestamp sanity
+* location freshness representation
+
+Create an internal contract that future dispatch/location services can consume.
+
+Do not synchronously persist every high-frequency driver coordinate into PostgreSQL merely because the database exists.
+
+Design the abstraction for high-frequency ephemeral location.
+
+---
+
+# LOCATION SECURITY
+
+Location submission must verify:
+
+* authenticated driver
+* ownership of the location identity
+* valid coordinate ranges
+* reasonable timestamp
+* rate limits
+* active session/device where required
+
+Reject:
+
+* NaN coordinates
+* out-of-range latitude/longitude
+* impossible timestamps
+* malformed identifiers
+
+Do not accept an arbitrary driver ID supplied by the client as proof of identity.
+
+---
+
+# AUDIT INFRASTRUCTURE
+
+Implement reusable audit infrastructure for security-sensitive and operationally significant actions.
+
+Audit records should include:
+
+* actor
+* actor type
+* action
+* target type
+* target ID
+* timestamp
+* request/correlation ID
+* result
+* reason where required
+* structured metadata where safe
+
+Do not place sensitive credentials or private document contents into audit records.
+
+Audit storage must be protected by authorization.
+
+---
+
+# EVENT INFRASTRUCTURE
+
+Implement foundational event infrastructure for the backend.
+
+Create a consistent event envelope containing appropriate fields such as:
+
+* event ID
+* event type
+* event version
+* entity/aggregate ID
+* producer
+* timestamp
+* correlation ID
+* trace ID where appropriate
+* payload
+
+Do not publish arbitrary ORM entities directly as event payloads.
+
+Events must be explicit contracts.
+
+---
+
+# EVENT VERSIONING
+
+Every event contract must include a version.
+
+The implementation must support additive evolution.
+
+Consumers must not depend on undocumented field ordering or ORM serialization.
+
+Do not publish database-specific internal structures that make schema evolution impossible.
+
+---
+
+# OUTBOX FOUNDATION
+
+Where the repository architecture uses transactional outbox, implement the foundational persistence and publishing abstraction required for reliable event delivery.
+
+The outbox design must support:
+
+* event ID
+* type
+* version
+* aggregate/entity ID
+* serialized payload
+* creation time
+* publishing state where appropriate
+* retry metadata
+* error metadata where safe
+
+The outbox write must participate in the same database transaction as the state change that requires the event.
+
+Do not implement an unreliable pattern that commits PostgreSQL and Kafka independently without recovery semantics.
+
+---
+
+# QUEUE FOUNDATION
+
+Implement BullMQ infrastructure that supports:
+
+* named queues
+* typed job payloads
+* worker registration
+* retry configuration
+* exponential backoff
+* timeout
+* concurrency configuration
+* graceful worker shutdown
+* structured job logging
+* job correlation
+* failure reporting
+
+Do not create a single unbounded queue for every background task.
+
+Foundational queue infrastructure must allow later domains to define isolated workload classes.
+
+---
+
+# QUEUE IDEMPOTENCY
+
+Create utilities/patterns that allow later job implementations to safely achieve idempotency.
+
+Where possible support:
+
+* deterministic job IDs
+* deduplication
+* attempt tracking
+* safe retry
+* result recording where required
+
+Do not claim that BullMQ's built-in retry behavior automatically makes a business operation idempotent.
+
+Business operations must remain responsible for preventing duplicate effects.
+
+---
+
+# REDIS FOUNDATION
+
+Implement a reusable Redis integration.
+
+Provide:
+
+* connection management
+* health monitoring
+* namespacing
+* structured key builders where appropriate
+* TTL helpers
+* safe serialization
+* error handling
+* graceful shutdown
+
+Do not scatter raw Redis connection handling across domain modules.
+
+---
+
+# REDIS FAILURE BEHAVIOR
+
+Redis must not become a hidden single point of failure for durable operations.
+
+Where Redis supports:
+
+* rate limiting
+* cache
+* ephemeral presence
+* future location state
+
+define explicit failure behavior.
+
+Critical durable user/account operations must continue using PostgreSQL as the authority.
+
+Do not convert temporary Redis failures into data corruption.
+
+---
+
+# CACHING FOUNDATION
+
+Create cache utilities only where repository requirements justify them.
+
+Every cache should define:
+
+* key
+* TTL
+* owner
+* serialization format
+* invalidation
+* stale behavior
+* fallback to authoritative storage
+
+Do not introduce caching for every repository read automatically.
+
+Avoid caching highly mutable security state without carefully defined invalidation.
+
+---
+
+# DATABASE TRANSACTION UTILITIES
+
+Provide an application-level transaction mechanism that allows domain services to execute atomic database operations where appropriate.
+
+Transactions must remain bounded and avoid:
+
+* external network calls inside long-lived transactions
+* unbounded loops
+* queue waits
+* user interaction
+* provider API calls
+
+External side effects should use appropriate outbox/event/job patterns.
+
+---
+
+# DISTRIBUTED CONCURRENCY FOUNDATIONS
+
+Provide reusable mechanisms for:
+
+* optimistic concurrency
+* unique constraints
+* state-version checking
+* idempotency
+* conflict detection
+
+Do not introduce distributed locking abstractions without an actual business need.
+
+Where locks are necessary, document:
+
+* key
+* TTL
+* ownership
+* release behavior
+* failure mode
+
+Never rely solely on Redis locks to enforce database invariants.
+
+---
+
+# HEALTH AND READINESS
+
+Implement health/readiness endpoints appropriate to the backend architecture.
 
 Distinguish:
 
-• Process alive
-• Ready
-• Dependency degraded
+* process liveness
+* application readiness
+* critical dependency readiness
 
-────────────────────────────────────────
+Do not cause a temporary optional dependency failure to make the entire platform appear dead unless that dependency is genuinely required for safe startup/operation.
 
-GRACEFUL SHUTDOWN
+Health endpoints must not leak credentials or internal infrastructure information.
 
-Implement shutdown support for:
+---
 
-• HTTP server
-• WebSocket gateways
-• NestJS modules
-• Prisma
-• Redis
-• Kafka producers
-• Kafka consumers
-• BullMQ workers
+# GRACEFUL SHUTDOWN
 
-Stop accepting new work before closing dependencies.
+Implement graceful application shutdown.
 
-Handle active requests and background jobs safely.
+The application must:
 
-────────────────────────────────────────
+* stop accepting new work
+* complete or safely terminate in-flight requests
+* disconnect WebSockets where applicable
+* stop background workers
+* finish safe queue acknowledgements
+* flush telemetry where appropriate
+* close database connections
+* close Redis connections
+* close Kafka connections
 
-OBSERVABILITY
+Do not terminate workers while claiming their jobs were successfully processed.
 
-Implement:
+---
 
-• Structured logging
-• Metrics
-• Distributed tracing
-• Correlation IDs
-• Request latency
-• Error metrics
-• Database metrics
-• Redis metrics
-• Kafka metrics
-• Queue metrics
-• WebSocket metrics
+# API DOCUMENTATION
 
-Use:
+Integrate OpenAPI/Swagger consistently.
 
-• OpenTelemetry
-• Prometheus-compatible metrics
+Document:
 
-Prepare metrics for:
+* authentication
+* request/response schemas
+* validation
+* errors
+* pagination
+* idempotency
+* major rider/driver endpoints
 
-• API traffic
-• WebSocket connections
-• Location ingestion
-• Dispatch
-• Matching
-• Trip state
-• Payments
-• Notifications
+Do not expose internal admin endpoints publicly without appropriate documentation and authorization.
 
-────────────────────────────────────────
+API documentation must reflect actual implementation.
 
-MAP PROVIDER ABSTRACTION
+---
 
-Create interfaces for:
+# SECURITY HEADERS AND HTTP HARDENING
 
-• Geocoding
-• Reverse geocoding
-• Places
-• Directions
-• Routes
-• Distance
-• ETA
+Apply appropriate HTTP protections including, where applicable:
 
-Do not allow provider-specific response models to leak into domain entities.
+* secure headers
+* CORS policy
+* request size limits
+* content-type validation
+* trusted proxy configuration
+* transport security assumptions
 
-Prepare:
+CORS must not use insecure wildcard configurations for credentialed production APIs.
 
-• Google Maps implementation boundary
-• Future alternative providers
+---
 
-Implement timeout and error normalization.
+# CORS
 
-────────────────────────────────────────
+Define explicit origin configuration.
 
-PAYMENT PROVIDER ABSTRACTION
+Support environment-specific allowed origins.
 
-Create interfaces for:
+Do not use:
 
-• Payment method
-• Authorization
-• Capture
-• Refund
-• Provider status
-• Webhooks
+* `*` with credentialed requests
+* unrestricted arbitrary origins
 
-Do not couple the trip domain directly to Stripe-specific objects.
+unless a specific endpoint is intentionally public and does not use credentials.
 
-────────────────────────────────────────
+---
 
-NOTIFICATION PROVIDER ABSTRACTION
+# CSRF CONSIDERATIONS
 
-Create interfaces for:
+Choose the CSRF posture based on the authentication mechanism.
 
-• Push
-• Email
-• SMS where approved
+If cookies are used for authenticated browser requests, implement appropriate CSRF protection.
 
-Support:
+If bearer-token authentication is used and tokens are not automatically attached by the browser, document the different threat model and still protect all browser-sensitive operations appropriately.
 
-• Provider response normalization
-• Retry
-• Error classification
+Do not claim CSRF is irrelevant without considering the actual transport mechanism.
 
-────────────────────────────────────────
+---
 
-API CONTRACT FOUNDATION
+# SECURITY-SENSITIVE LOGGING
 
-Create shared conventions for:
+Implement structured logs while enforcing redaction.
 
-• Resource naming
-• Request DTOs
-• Response DTOs
-• Pagination
-• Cursor pagination
-• Errors
-• Idempotency
-• Versioning
+Never log:
 
-Prepare contract packages for:
+* passwords
+* access tokens
+* refresh tokens
+* session secrets
+* payment credentials
+* raw compliance documents
+* private keys
+* provider secrets
 
-• Riders
-• Drivers
-• Vehicles
-• Location
-• Ride requests
-• Dispatch
-• Trips
-• Pricing
-• Payments
-• Earnings
-• Safety
-• Support
+Avoid unnecessarily logging:
 
-Do not implement domain business logic in contract packages.
+* exact rider location
+* exact driver historical location
+* sensitive identity information
 
-────────────────────────────────────────
+Provide centralized redaction utilities where practical.
 
-EVENT CONTRACT FOUNDATION
+---
 
-Create reusable conventions for:
+# OBSERVABILITY FOUNDATION
 
-• Event naming
-• Event versions
-• Metadata
-• Producer ownership
-• Payload schemas
-• Compatibility
-• Correlation
-
-Do not create the full event catalog yet.
-
-────────────────────────────────────────
-
-TESTING FOUNDATION
-
-Implement:
-
-• Jest configuration
-• Unit-test utilities
-• Integration-test utilities
-• Database test helpers
-• Redis test helpers
-• Kafka test helpers
-• BullMQ test helpers
-• WebSocket test helpers
-• API testing helpers
-• Test fixtures
-• Test factories
-
-Support deterministic tests.
-
-────────────────────────────────────────
-
-LOCAL DEVELOPMENT
-
-Provide local infrastructure supporting:
+Integrate OpenTelemetry-compatible tracing and metrics.
 
-• PostgreSQL
-• PostGIS
-• Redis
-• Kafka/Redpanda
-• OpenSearch where required later
-• S3-compatible object storage where useful
+Instrument:
 
-Use Docker Compose where appropriate.
+* HTTP requests
+* database calls
+* Redis calls
+* queue jobs
+* Kafka producers/consumers where present
+* authentication operations
+* important domain commands
 
-No local environment should require production credentials.
+Every trace should preserve:
 
-────────────────────────────────────────
+* request/correlation ID
+* trace ID
+* operation name
+* relevant safe entity identifiers
 
-SECURITY TEST FOUNDATION
+---
 
-Prepare tests for:
+# BUSINESS METRICS FOUNDATION
 
-• Authentication
-• Authorization
-• Rate limiting
-• IDOR
-• Input validation
-• WebSocket authorization
-• Geographic input validation
-• Provider webhook verification
-• Secret exposure
+Create reusable metrics infrastructure for later domains.
 
-────────────────────────────────────────
+Foundational metrics should support:
 
-DOCUMENTATION
+* request count
+* request latency
+* error rate
+* authentication failures
+* authorization failures
+* rate-limit events
+* database latency
+* Redis latency
+* queue depth
+* job failures
+* event publishing failures
 
-Generate backend foundation documentation covering:
+Avoid creating meaningless metrics for every method.
 
-• Backend architecture
-• Project structure
-• Configuration
-• API conventions
-• Error handling
-• Validation
-• Database conventions
-• Prisma
-• PostGIS
-• Redis
-• Kafka/Redpanda
-• BullMQ
-• WebSockets
-• Socket.IO
-• Maps abstraction
-• Payment abstraction
-• Notifications
-• Observability
-• Testing
-• Local development
-• Security foundation
+Metrics should support real operational decisions.
 
-────────────────────────────────────────
+---
 
-PROJECT INDEX
+# SECURITY AUDIT EVENTS
 
-Update the backend Project Index with:
+Emit audit events for operations such as:
 
-• Backend applications
-• Services
-• Workers
-• Shared packages
-• Configuration
-• Database foundation
-• PostGIS foundation
-• Redis foundation
-• Kafka foundation
-• BullMQ foundation
-• WebSocket foundation
-• Maps abstraction
-• Payment abstraction
-• Notification abstraction
-• Observability
-• Testing
-• Local development
-• Security
-• Generated files
-• Modified files
-• Remaining work
-• Current milestone
-• Dependencies
+* login
+* logout where appropriate
+* credential changes
+* account recovery
+* role/permission changes
+* driver compliance review
+* driver suspension
+* vehicle eligibility change
+* administrative profile modification
 
-────────────────────────────────────────
+Do not create audit records for every insignificant read.
 
-IMPLEMENTATION MILESTONES
+Focus on security-sensitive and materially consequential actions.
 
-BACKEND MILESTONE 1
+---
 
-Monorepo backend structure, NestJS application bootstrap, configuration, request context, logging, error handling, validation, security foundation, and API foundation.
+# PRIVACY CONTROLS
 
-BACKEND MILESTONE 2
+Implement foundational privacy rules.
 
-PostgreSQL, Prisma, PostGIS, migrations, transaction utilities, connection management, and database health.
+At minimum:
 
-BACKEND MILESTONE 3
+* limit user data returned in DTOs
+* avoid exposing internal identifiers unnecessarily
+* restrict exact location access
+* protect compliance metadata
+* support account deactivation/deletion architecture
+* prevent unauthorized historical-data access
 
-Redis infrastructure, key conventions, cache abstractions, TTL handling, short-lived leases, idempotency, and geospatial primitives.
+Do not allow an authenticated user to query another user's data by changing a URL parameter.
 
-BACKEND MILESTONE 4
+Every resource query must perform appropriate ownership/permission checks.
 
-Kafka/Redpanda, event envelopes, producers, consumers, serialization, retries, dead-letter infrastructure, and transactional outbox.
+---
 
-BACKEND MILESTONE 5
+# DATA DELETION FOUNDATION
 
-BullMQ, queue infrastructure, worker lifecycle, retries, backoff, timeouts, dead-letter handling, and background-job observability.
+Design account deletion/anonymization service boundaries.
 
-BACKEND MILESTONE 6
+Distinguish between:
 
-WebSocket and Socket.IO foundation, authentication, connection management, rooms, Redis coordination, heartbeats, and backpressure.
+* data that may be deleted
+* data that must be retained for financial/legal reasons
+* data requiring anonymization
+* derived/cache data
+* asynchronous deletion tasks
 
-BACKEND MILESTONE 7
+Do not physically delete financial/audit records simply because a user requested account deletion if retention is required.
 
-Maps provider abstraction, routing abstraction, ETA abstraction, payment abstraction, notification abstraction, and provider error normalization.
+---
 
-BACKEND MILESTONE 8
+# TESTING REQUIREMENTS
 
-Observability, health checks, graceful shutdown, metrics, tracing, and centralized diagnostics.
+Write automated tests for every implemented backend capability.
 
-BACKEND MILESTONE 9
+At minimum cover:
 
-Testing infrastructure, integration helpers, fixtures, factories, local development, and security test foundations.
+## AUTHENTICATION
 
-BACKEND MILESTONE 10
+* registration
+* successful login
+* invalid credentials
+* disabled accounts
+* expired tokens
+* refresh rotation/revocation
+* logout
+* recovery
+* rate limiting
 
-Shared API/event contracts, documentation, hardening, architecture conformance, and Project Index completion.
+## AUTHORIZATION
 
-Each milestone should contain approximately 20–40 files where practical.
+* correct-role access
+* incorrect-role access
+* resource ownership
+* administrative permissions
+* suspended-account behavior
 
-Every milestone must compile before proceeding.
+## RIDERS
 
-────────────────────────────────────────
+* profile creation
+* retrieval
+* update
+* unauthorized access
+* validation failures
 
-OUTPUT FORMAT
+## DRIVERS
 
-For every generated file provide:
+* profile creation
+* retrieval
+* update
+* unauthorized access
+* state validation
 
-1. Exact file path
-2. Complete file contents
+## COMPLIANCE
 
-Never truncate code.
+* onboarding transitions
+* evidence submission
+* review authorization
+* invalid transitions
+* expiration state
 
-Never summarize source code instead of generating it.
+## VEHICLES
 
-Never generate pseudo-code.
+* creation
+* update
+* ownership
+* eligibility
+* concurrent relationship constraints
 
-Never generate placeholders.
+## AVAILABILITY
 
-Never generate TODO implementations.
+* state changes
+* authorization
+* invalid transitions
+* consistency with driver restrictions
 
-When modifying an existing file:
+## LOCATION
 
-1. Provide the exact file path.
-2. State why it must change.
-3. Provide the complete updated file.
+* coordinate validation
+* timestamp validation
+* ownership
+* rate limiting
+* malformed input
 
-Never regenerate unchanged files.
+## AUDIT
 
-────────────────────────────────────────
+* required actions produce audit records
+* unauthorized actors cannot create privileged audit events
+* sensitive data is redacted
 
-SCOPE RESTRICTION
+## INFRASTRUCTURE
 
-This volume covers only backend foundations:
+* Redis failure behavior
+* database connection failure handling
+* queue startup/shutdown
+* event envelope validation
 
-• Application bootstrap
-• Configuration
-• Request context
-• Logging
-• Error handling
-• Validation
-• Security foundation
-• API foundation
-• PostgreSQL
-• Prisma
-• PostGIS
-• Redis
-• Kafka/Redpanda
-• Transactional outbox
-• BullMQ
-• WebSockets
-• Socket.IO
-• Maps abstraction
-• Payment abstraction
-• Notification abstraction
-• Observability
-• Health checks
-• Graceful shutdown
-• Testing foundation
-• Local development
-• Shared contracts
+Tests must exercise real repository behavior rather than mock every dependency.
 
-Do not implement complete:
+---
 
-• Riders
-• Drivers
-• Driver onboarding
-• Driver verification
-• Vehicles
-• Availability
-• Location service
-• Dispatch
-• Matching
-• Ride requests
-• Trips
-• Scheduled rides
-• Shared rides
-• Pricing
-• Surge
-• Promotions
-• Payments business logic
-• Wallets
-• Earnings
-• Payouts
-• Ratings
-• Messaging business logic
-• Notifications business logic
-• Safety
-• Fraud
-• Support
-• Business accounts
-• Analytics
-• Administration
+# INTEGRATION TESTING
 
-Those belong to later backend implementation volumes.
+Add integration tests that validate:
 
-────────────────────────────────────────
+* PostgreSQL persistence
+* Prisma transactions
+* unique constraints
+* authorization against real persisted data
+* Redis-backed security controls
+* queue registration
+* event publishing where infrastructure is available
 
-QUALITY BAR
+Use realistic test environments.
 
-Treat this backend foundation as critical infrastructure for a globally distributed mobility platform.
+Do not disable database constraints merely to simplify tests.
 
-Assume:
+---
 
-• Hundreds of millions of riders
-• Millions of drivers
-• Tens of millions of concurrent mobile connections
-• Massive location traffic
-• Very high dispatch throughput
-• Large payment volumes
-• Large trip history
-• Global operation
-• Regional dispatch
-• Strict financial correctness
-• Strict location privacy
-• High availability
-• Disaster recovery
+# MIGRATION TESTING
+
+Every schema change must be validated.
+
+Verify:
+
+* migration applies cleanly
+* schema matches Prisma expectations
+* indexes exist
+* constraints exist
+* fresh database initialization works
+* existing-data migration behavior is safe where relevant
+
+Do not manually edit production data as a substitute for migration design.
+
+---
+
+# API CONTRACT TESTING
+
+Verify:
+
+* validation
+* response schemas
+* errors
+* authentication
+* authorization
+* pagination
+* resource ownership
+
+Where OpenAPI is used, ensure documented behavior reflects actual runtime behavior.
+
+---
+
+# BACKWARD COMPATIBILITY
+
+Inspect current repository consumers before changing:
+
+* endpoints
+* request structures
+* response structures
+* authentication behavior
+* database fields
+* event names
+* queue payloads
+
+Prefer additive migration.
+
+If a breaking change is required, document:
+
+* affected consumers
+* migration path
+* compatibility strategy
+* removal conditions
+
+Do not break mobile clients casually because they may remain on older versions after backend deployment.
+
+---
+
+# PERFORMANCE
+
+Benchmark or reason explicitly about:
+
+* authentication lookup
+* authorization lookup
+* user retrieval
+* driver retrieval
+* vehicle retrieval
+* compliance lookup
+* location-write handling
+* Redis operations
+* database connection usage
+
+Prevent:
+
+* N+1 queries
+* unbounded list queries
+* repeated expensive permission lookups
+* unnecessary serialization
+* excessive database transactions
+* per-request initialization of infrastructure clients
+
+---
+
+# SECURITY REVIEW
+
+Before declaring the implementation complete, review for:
+
+* IDOR
+* authentication bypass
+* authorization bypass
+* privilege escalation
+* user enumeration
+* brute-force vulnerability
+* token leakage
+* session replay
+* insecure password handling
+* SQL injection through raw queries
+* unsafe deserialization
+* mass assignment
+* insecure file references
+* sensitive logging
+* CORS errors
+* CSRF exposure where relevant
+* SSRF exposure through future integration boundaries
+
+Fix actual issues discovered during implementation.
+
+Do not leave known critical security defects unresolved while declaring the foundational backend complete.
+
+---
+
+# IMPLEMENTATION DISCIPLINE
+
+Before modifying files:
+
+1. Inspect the repository.
+2. Identify existing compatible implementation.
+3. Identify the exact scope of this prompt.
+4. Preserve working functionality.
+5. Implement the foundational backend capabilities completely.
+6. Integrate all modules into the actual NestJS application.
+7. Create or update Prisma migrations.
+8. Add tests.
+9. Add observability.
+10. Add security controls.
+11. Validate APIs.
+12. Validate database operations.
+13. Validate application startup and shutdown.
+14. Run linting/formatting.
+15. Run type checking.
+16. Run relevant automated tests.
+17. Validate migrations.
+18. Review compatibility.
+19. Update documentation.
+20. Produce the required implementation report.
+
+Do not rewrite the entire repository.
+
+---
+
+# PRODUCTION COMPLETENESS
+
+A module is not complete merely because its controller exists.
+
+Every implemented backend capability must include, where applicable:
+
+* DTOs
+* validation
+* service/application logic
+* domain rules
+* persistence
+* database constraints
+* authorization
+* error handling
+* observability
+* tests
+* documentation
+* integration into module composition
+
+Do not leave routes connected to placeholders.
+
+Do not return hardcoded data.
+
+Do not create fake provider integrations.
+
+Do not leave TODO/FIXME implementation gaps.
+
+Do not use comments such as:
+
+* "implement later"
+* "similar to above"
+* "omitted for brevity"
+
+as substitutes for implementation.
+
+---
+
+# PROHIBITED PRACTICES
+
+Never:
+
+* hardcode credentials
+* hardcode JWT secrets
+* trust client role claims without server verification
+* trust client driver IDs
+* trust client ownership claims
+* store plaintext passwords
+* place access tokens in logs
+* use Redis as the only source of durable identity data
+* implement privileged operations only in controllers without service authorization
+* allow unrestricted account queries
+* accept arbitrary database sort/filter expressions
+* perform unbounded database reads
+* use distributed locks as the only business invariant protection
+* treat queue retries as idempotency
+* publish raw ORM entities as durable public events
+* bypass database constraints because application validation exists
+* silently swallow provider/infrastructure failures
+* disable tests to achieve a passing build
+* create duplicate identity systems
+
+---
+
+# IMPLEMENTATION BOUNDARIES
+
+This prompt establishes the production backend foundation.
+
+Implement only the scope defined in this document and necessary integration work.
+
+Do not implement the entire Uber-style marketplace in one backend pass.
+
+Do not build a second parallel architecture.
+
+Do not redesign future dispatch, payment, or pricing systems prematurely.
+
+Instead, create stable foundations that those future domains can consume through explicit interfaces and contracts.
+
+---
+
+# REQUIRED IMPLEMENTATION DELIVERABLES
+
+Implement or update the repository with the appropriate backend components for:
+
+## APPLICATION FOUNDATION
+
+* NestJS bootstrap
+* configuration
+* validation
+* exception handling
+* request correlation
+* health/readiness
+* graceful shutdown
+* API documentation
+
+## IDENTITY
+
+* user model
+* authentication
+* sessions/tokens where applicable
+* account states
+* recovery mechanisms
+* rate limits
+
+## AUTHORIZATION
+
+* roles
+* permissions
+* authentication guards
+* authorization guards
+* ownership enforcement
+
+## RIDER
+
+* rider profile
+* profile APIs
+* validation
+* authorization
+
+## DRIVER
+
+* driver profile
+* driver state foundations
+* profile APIs
+* authorization
+
+## COMPLIANCE
+
+* onboarding state
+* compliance state
+* evidence metadata
+* authorized review actions
+* auditability
+
+## VEHICLES
+
+* vehicle model
+* CRUD operations
+* ownership
+* eligibility foundation
+* concurrency constraints
+
+## AVAILABILITY
+
+* state model
+* transition service
+* authorization
+* persistence as required
+
+## LOCATION
+
+* validation
+* authenticated driver association
+* rate limiting
+* high-frequency ingestion contract
+* freshness representation
+
+## PLATFORM INFRASTRUCTURE
+
+* PostgreSQL/Prisma
+* Redis
+* BullMQ
+* event envelope
+* outbox foundation where appropriate
+* OpenTelemetry
+* structured logging
+* metrics
+
+## SECURITY
+
+* hardened HTTP
+* secure authentication
+* authorization
+* rate limiting
+* sensitive-data redaction
+* audit
+
+---
+
+# REQUIRED API SURFACES
+
+Implement the appropriate authenticated API boundaries for the foundational domains.
+
+At minimum, support concepts equivalent to:
+
+* authentication
+* current user
+* rider profile
+* driver profile
+* driver onboarding/compliance
+* vehicles
+* availability
+* driver location submission
+
+Exact routes, versioning, and naming must follow repository conventions.
+
+Do not invent duplicate route families where compatible ones already exist.
+
+Every endpoint must define:
+
+* authentication requirement
+* authorization requirement
+* request validation
+* response DTO
+* error semantics
+* observability
+* tests
+
+---
+
+# DATABASE VALIDATION
+
+After implementation:
+
+* apply migrations in a clean database
+* validate Prisma schema
+* validate indexes
+* validate uniqueness
+* validate foreign keys
+* verify transaction behavior
+* test account and ownership constraints
+* test driver/vehicle relationship rules
+* test state-transition constraints where implemented
+
+Do not claim database readiness if migrations are not reproducible.
+
+---
+
+# RUNTIME VALIDATION
+
+Verify:
+
+* application startup
+* configuration loading
+* database connectivity
+* Redis connectivity
+* queue initialization
+* health endpoints
+* graceful shutdown
+* authentication flows
+* authorization flows
+* rider APIs
+* driver APIs
+* compliance flows
+* vehicle flows
+* availability flows
+* location validation
+
+Use actual repository commands and environments.
+
+Do not report tests as passed if they were not executed.
+
+---
+
+# DOCUMENTATION
+
+Update repository documentation for:
+
+* backend setup
+* required environment variables
+* authentication flow
+* database migrations
+* Redis requirements
+* queue requirements
+* local development
+* API documentation
+* security-sensitive operational settings
+* testing commands
+
+Documentation must describe the actual implemented system.
+
+Never document nonexistent behavior.
+
+---
+
+# COMPLETION REPORT REQUIREMENTS
+
+When implementation is complete, report:
+
+## FILES CREATED
+
+List every new file.
+
+## FILES MODIFIED
+
+List every modified file.
+
+## MAJOR FUNCTIONALITY
+
+Describe the completed backend foundation.
+
+## DATABASE CHANGES
+
+Report:
+
+* Prisma schema changes
+* migrations
+* constraints
+* indexes
+* relationship changes
+
+## API CHANGES
+
+Report:
+
+* authentication endpoints
+* user endpoints
+* rider endpoints
+* driver endpoints
+* compliance endpoints
+* vehicle endpoints
+* availability endpoints
+* location endpoints
+* other affected endpoints
+
+## EVENT CHANGES
+
+Report:
+
+* event infrastructure
+* event envelopes
+* event types
+* outbox changes
+
+## QUEUE CHANGES
+
+Report:
+
+* queue infrastructure
+* worker changes
+* retry configuration
+* graceful shutdown
+
+## INFRASTRUCTURE CHANGES
+
+Report:
+
+* Redis
+* PostgreSQL
+* observability
+* configuration
+* environment changes
+
+## SECURITY CHANGES
+
+Report:
+
+* authentication
+* authorization
+* rate limiting
+* token/session security
+* redaction
+* audit logging
+
+## OBSERVABILITY CHANGES
+
+Report:
+
+* logs
+* metrics
+* traces
+* health checks
+* correlation IDs
+
+## TESTS
+
+List tests added or changed and the behavior they verify.
+
+## VALIDATION
+
+Report:
+
+* formatting
+* linting
+* type checking
+* builds
+* migrations
+* unit tests
+* integration tests
+* API tests
+* runtime verification
+
+## COMPATIBILITY
+
+Identify:
+
+* existing consumers affected
+* API compatibility considerations
+* database compatibility
+* mobile/web implications
+* migration considerations
+
+## UNRESOLVED ISSUES
+
+List only genuine remaining issues.
+
+Do not claim completion if required foundational functionality is missing or unverified.
+
+---
+
+# FINAL ENGINEERING PRINCIPLE
+
+The backend foundation must become the trusted execution layer for the complete ride-hailing platform.
+
+Authentication, authorization, user identity, rider state, driver state, compliance, vehicles, availability, location, persistence, events, queues, security, and observability must be implemented as real production functionality with explicit ownership and stable contracts.
 
 Prioritize:
 
-• Correctness
-• Low latency
-• Security
-• Reliability
-• Scalability
-• Clear ownership
-• Observability
-• Testability
-• Future service extraction
-• Production readiness
+* correctness
+* secure authorization
+* durable persistence
+* concurrency safety
+* idempotency
+* observability
+* privacy
+* maintainability
+* scalability
+* compatibility
+
+The repository remains the implementation source of truth.
+
+Every implementation decision must preserve the ability for later ride, dispatch, pricing, payment, notification, safety, and administrative backend capabilities to integrate cleanly without creating conflicting sources of truth or requiring an unnecessary rewrite.

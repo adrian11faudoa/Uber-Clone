@@ -1,1490 +1,1861 @@
-You are operating in Senior Engineering Team Mode.
+# UBER-STYLE RIDE-HAILING PLATFORM — BACKEND PROMPT — VOLUME 4
+
+## ROLE
+
+You are the senior backend engineering organization responsible for completing the production backend platform for a globally scalable ride-hailing and mobility marketplace comparable in product depth and operational sophistication to Uber.
+
+Operate as a coordinated team consisting of:
+
+* Principal Software Architect
+* Staff Backend Engineer
+* Database Architect
+* Distributed Systems Engineer
+* Security Engineer
+* Performance Engineer
+* Reliability Engineer
+* QA Engineer
+* DevOps Engineer
+* Technical Writer
+
+You are implementing production software against the existing repository.
+
+You are not creating a tutorial, prototype, benchmark-only implementation, or simplified demonstration.
+
+This volume is responsible for completing the backend's operational intelligence, analytics ingestion, administrative search, data lifecycle controls, privacy operations, reliability automation, reconciliation framework, and backend-wide production hardening required after the core marketplace, financial, safety, support, and risk capabilities have been implemented.
+
+The repository is the source of truth for what currently exists.
+
+Do not assume that another AI prompt or previous conversation is available.
+
+---
+
+# PROJECT
+
+Complete the production backend capabilities required to operate the ride-hailing marketplace at commercial scale.
+
+The backend now must provide a coherent operational platform around:
+
+* riders
+* drivers
+* vehicles
+* compliance
+* locations
+* ride requests
+* dispatch
+* trips
+* pricing
+* payments
+* refunds
+* earnings
+* payouts
+* ratings
+* notifications
+* safety
+* fraud/risk
+* support
+* promotions
+* administration
+* analytics
+* auditability
+* data lifecycle
+* privacy operations
+* reconciliation
+* reliability automation
+* observability
+
+This volume must not introduce a new product architecture.
+
+Instead, complete the operational backend layer around the existing domains and harden the system for high-volume production operation.
+
+---
+
+# SOURCE OF TRUTH
+
+Before modifying the repository, inspect:
+
+* NestJS applications and modules
+* Prisma schema and migrations
+* PostgreSQL indexes and constraints
+* Redis usage
+* Kafka topics and consumers
+* outbox processing
+* BullMQ queues and workers
+* WebSocket infrastructure
+* ride/trip/dispatch domains
+* pricing
+* payments
+* earnings/payouts
+* notifications
+* safety
+* fraud/risk
+* support
+* promotions
+* administrative APIs
+* audit infrastructure
+* existing search implementation
+* analytics/event consumers
+* privacy/deletion workflows
+* logging/metrics/tracing
+* tests
+* existing frontend/mobile consumers
+* deployment configuration
 
-Build the production-ready backend for ride requests, dispatch, driver matching, driver offers, trip lifecycle, scheduled rides, multi-stop trips, shared rides, and real-time trip state for an enterprise-scale global ride-hailing and mobility platform comparable in architectural scope to Uber.
+Preserve compatible behavior.
 
-The platform is an original implementation.
+Extend existing implementations instead of creating duplicate infrastructure.
 
-Do not copy proprietary source code, internal architecture, branding, confidential implementation details, proprietary algorithms, or private implementation details from Uber or any other company.
+Do not regenerate unchanged files.
 
-This prompt is completely independent and may be executed in a separate conversation.
+---
 
-The backend must follow the approved Uber-like architecture, domain boundaries, database ownership, PostGIS strategy, Redis strategy, real-time architecture, maps abstraction, driver-availability architecture, security model, event architecture, queue architecture, and Project Index.
+# BACKEND SCOPE
 
-Do not redesign the architecture.
+This prompt owns:
 
-Do not generate frontend code.
+* operational analytics ingestion
+* business-event analytics processing
+* administrative search
+* operational dashboards data APIs
+* reconciliation framework
+* data-retention automation
+* privacy deletion/anonymization workflows
+* data-export workflows where applicable
+* cache/index invalidation infrastructure
+* event replay tooling
+* dead-letter management
+* queue recovery tooling
+* outbox monitoring
+* event consumer health
+* operational configuration services
+* feature-flag backend support where applicable
+* production backend hardening
+* backend-wide resilience validation
+* database performance hardening
+* API protection hardening
+* audit retention
+* compliance-oriented operational controls
+* backend integration tests
+* production readiness verification
 
-Do not generate mobile code.
+Do not implement cloud infrastructure deployment in this volume.
 
-Do not generate infrastructure implementation code.
+Do not implement frontend or mobile applications.
 
-Do not generate Terraform.
+---
 
-Do not generate Kubernetes manifests.
+# DOMAIN OWNERSHIP
 
-Do not generate CI/CD workflows.
+Maintain the existing authoritative domain boundaries.
 
-────────────────────────────────────────
+Analytics must not become the source of truth for:
 
-MISSION
+* rides
+* trips
+* payments
+* earnings
+* payouts
+* users
+* drivers
 
-Implement the production-ready backend required for:
+Search indexes must remain derived representations.
 
-• Ride requests
-• Fare-estimate integration
-• Pickup and dropoff validation
-• Ride-category selection
-• Driver candidate retrieval
-• Dispatch
-• Matching
-• Driver offers
-• Assignment
-• Reassignment
-• Driver acceptance
-• Driver rejection
-• Offer expiration
-• Trip lifecycle
-• Driver en-route state
-• Driver arrival
-• Trip start
-• Trip progress
-• Trip completion
-• Trip cancellation
-• Multi-stop trips
-• Scheduled rides
-• Shared rides
-• Airport trip constraints
-• Real-time trip-state propagation
-• Rider trip tracking
-• Driver trip-state synchronization
-• Dispatch recovery
-• Assignment consistency
+Operational dashboards must consume derived telemetry/analytics rather than querying transactional tables indiscriminately.
 
-The implementation must support:
+Privacy workflows may orchestrate deletion/anonymization but must not violate financial, audit, or legal retention requirements.
 
-• Hundreds of millions of riders
-• Millions of drivers
-• Large numbers of simultaneous ride requests
-• Millions of active trips
-• Massive real-time traffic
-• Regional dispatch
-• Very low assignment latency
-• Strong trip-state correctness
-• High availability
+Administrative tooling must invoke domain-approved commands rather than directly editing domain persistence.
 
-────────────────────────────────────────
+---
 
-TECHNOLOGY STACK
+# ANALYTICS ARCHITECTURE
 
-Backend:
+Implement the backend-side analytics ingestion architecture needed to observe marketplace behavior without placing analytical workloads on transactional PostgreSQL.
 
-• Node.js
-• NestJS
-• TypeScript
+Use domain events already emitted by the platform.
 
-Database:
+Relevant analytics domains include:
 
-• PostgreSQL
-• Prisma ORM
-• PostGIS
+* ride demand
+* driver supply
+* dispatch performance
+* trip completion
+* cancellation
+* pricing
+* payments
+* earnings
+* payouts
+* notifications
+* safety
+* fraud/risk
+* support
+* promotions
 
-Transient state:
+Analytics processing must be asynchronous.
 
-• Redis
+Do not add synchronous analytics work to the ride-request or trip-critical paths.
 
-Event streaming:
+---
 
-• Kafka or Redpanda
+# ANALYTICS EVENTS
 
-Background processing:
+Create or extend event consumers that transform operational domain events into analytics records.
 
-• BullMQ
+Analytics events should contain only necessary information.
 
-Real-time:
+Do not publish or retain:
 
-• WebSockets
-• Socket.IO
+* authentication credentials
+* payment credentials
+* secrets
+* unnecessary precise historical location
+* unnecessary sensitive identity information
 
-Maps:
+Where aggregate metrics are sufficient, prefer aggregate/event metadata over raw sensitive records.
 
-• Google Maps Platform or approved provider abstraction
+---
 
-Observability:
+# ANALYTICS IDEMPOTENCY
 
-• OpenTelemetry
-• Prometheus
-• Grafana
-• Loki
-• Tempo
+Analytics consumers must tolerate:
 
-Testing:
+* duplicate events
+* replay
+* consumer restart
+* Kafka rebalance
+* delayed events
 
-• Jest
-• Supertest
-• Integration and performance testing tools
+Use deterministic event identifiers and durable processing state where required.
 
-────────────────────────────────────────
+Do not double-count:
 
-IMPLEMENTATION RULES
+* rides
+* completed trips
+* payment outcomes
+* payouts
+* cancellations
+* notification deliveries
 
-Never generate pseudo-code.
+---
 
-Never generate placeholders.
+# BUSINESS METRICS PIPELINE
 
-Never generate TODO comments.
+Support derived operational metrics such as:
 
-Never omit implementations.
+* ride requests
+* match rate
+* dispatch latency
+* driver acceptance rate
+* rider cancellation rate
+* driver cancellation rate
+* trip completion rate
+* average trip duration
+* supply availability
+* stale-location rate
+* ETA accuracy signals
+* payment success rate
+* refund rate
+* payout success rate
+* notification delivery rate
+* safety incident rate
+* support backlog
+* promotion utilization
+* risk-signal volume
 
-Never say:
+Metrics must have clear definitions.
 
-- "implement similarly"
-- "left as an exercise"
-- "for brevity"
-- "remaining code omitted"
+Do not allow multiple modules to calculate the same business metric differently without an explicit reason.
 
-Every generated file must be complete.
+---
 
-Every generated file must compile.
+# ANALYTICS TIME MODEL
 
-Never regenerate unchanged files.
+Analytics must preserve event time separately from processing time where required.
 
-Only modify existing files when required.
+Use UTC for event storage unless market-local time is explicitly required for reporting.
 
-Use strict TypeScript.
+Support aggregation windows such as:
 
-Use dependency injection.
+* minute
+* hour
+* day
+* market
+* city
+* service zone
+* ride product
 
-Keep controllers thin.
+Do not rely solely on application server processing time when measuring marketplace behavior.
 
-Keep domain logic outside controllers.
+---
 
-Use repositories for persistence.
+# OPERATIONAL DASHBOARD APIS
 
-Use DTOs for external contracts.
+Implement secure backend APIs supporting authorized operational dashboards.
 
-Use centralized validation.
+Dashboards may consume metrics such as:
 
-Use centralized error handling.
+* active riders
+* active drivers
+* active trips
+* dispatch backlog
+* location freshness
+* payment failures
+* payout failures
+* notification failures
+* queue backlog
+* event lag
+* dead-letter count
+* safety incidents
+* support cases
 
-Use structured logging.
+Dashboard APIs must use pre-aggregated or purpose-built data where necessary.
 
-Use idempotency for ride requests, offers, assignments, cancellations, and state transitions where required.
+Do not allow administrators to execute arbitrary analytical queries against the production transactional database.
 
-Use optimistic concurrency for trip state where appropriate.
+---
 
-Use short-lived leases for dispatch resources.
+# ADMINISTRATIVE SEARCH
 
-Never use a long-lived distributed lock for the entire trip.
+Implement controlled operational search for entities such as:
 
-────────────────────────────────────────
+* users
+* drivers
+* vehicles
+* rides
+* trips
+* payments
+* payouts
+* support cases
+* safety incidents
+* promotions
+* risk signals
 
-DOMAIN OWNERSHIP
+Search may use OpenSearch/Elasticsearch or an existing repository search architecture.
 
-Maintain explicit boundaries between:
+Search must never become authoritative state.
 
-• Ride requests
-• Dispatch
-• Matching
-• Driver offers
-• Trip lifecycle
-• Scheduled rides
-• Multi-stop trips
-• Shared rides
-• Airport operations
-• Driver availability
-• Location
-• Pricing
+---
 
-Do not combine:
+# SEARCH INDEXING
 
-• Ride request with completed trip
-• Driver availability with permanent driver state
-• Matching with payment
-• Trip state with location storage
-• Scheduled ride with active-trip ownership
-
-────────────────────────────────────────
-
-RIDE REQUEST DOMAIN
-
-Implement:
-
-• Create ride request
-• Pickup location
-• Destination
-• Stops
-• Ride category
-• Passenger count
-• Accessibility requirements
-• Scheduled time
-• Promotion reference
-• Payment method reference
-• Fare estimate reference
-
-Ride-request states:
-
-• Created
-• Validating
-• Searching
-• Match Found
-• Assigned
-• Canceled
-• Failed
-• Expired
-
-Define valid transitions.
-
-────────────────────────────────────────
-
-REQUEST VALIDATION
-
-Validate:
-
-• Rider authorization
-• Pickup coordinates
-• Destination coordinates
-• Service-area coverage
-• Ride category
-• Passenger capacity
-• Accessibility requirements
-• Scheduled-time constraints
-• Payment-method availability
-
-Do not trust client-computed:
-
-• Distance
-• ETA
-• Fare
-• Service-area membership
-
-────────────────────────────────────────
-
-PICKUP AND DROPOFF
+Index transactional records through events or other reliable asynchronous mechanisms.
 
 Support:
 
-• Exact coordinates
-• Place references
-• Address metadata
-• Pickup instructions
-• Landmark
-• Terminal
-• Designated pickup zone
+* index creation
+* update
+* deletion
+* retry
+* dead-letter handling
+* reindexing
+* index versioning
 
-Normalize location data before dispatch.
+Index documents must contain only information appropriate for their audience.
 
-────────────────────────────────────────
+Do not expose fields merely because they happen to exist in PostgreSQL.
 
-RIDE CATEGORY
+---
 
-Support configurable categories such as:
+# SEARCH CONSISTENCY
 
-• Economy
-• Standard
-• Premium
-• XL
-• Accessible
-• Electric
+Search is eventually consistent.
 
-Category eligibility depends on:
+Administrative workflows must distinguish:
 
-• Region
-• Vehicle
-• Driver
-• Passenger count
-• Accessibility
+* search result
+* authoritative record
 
-Do not hard-code categories into dispatch logic.
+Before executing a privileged mutation:
 
-────────────────────────────────────────
+1. resolve the target from the search result
+2. verify authorization
+3. retrieve authoritative state
+4. validate the current state
+5. execute a domain command
 
-DISPATCH ARCHITECTURE
+Never mutate based solely on stale search results.
 
-Implement regional dispatch.
+---
 
-Flow:
+# SEARCH REBUILD
 
-Ride Request
-→ Validation
-→ Service Area
-→ Candidate Query
-→ Eligibility
-→ ETA
-→ Scoring
-→ Driver Offer
-→ Response
-→ Reservation
-→ Assignment
+Implement a safe reindex/rebuild strategy.
 
-Dispatch must be:
+The system must support rebuilding indexes from authoritative data without corrupting the active index.
 
-• Region-aware
-• Low latency
-• Horizontally scalable
-• Idempotent
-• Recoverable
+Where practical use:
 
-────────────────────────────────────────
+* new index version
+* backfill
+* validation
+* alias/switch
+* old-index cleanup
 
-DISPATCH SHARDING
+Do not require production downtime for routine index reconstruction.
 
-Partition dispatch by:
+---
 
-• Region
-• City
-• Operational zone
-• Spatial cell
+# DEAD-LETTER MANAGEMENT
 
-A request should have a dispatch owner.
-
-Define:
-
-• Dispatch partition key
-• Ownership
-• Rebalancing
-• Failover
-• Cross-cell expansion
-
-Avoid a single global dispatch process.
-
-────────────────────────────────────────
-
-CANDIDATE GENERATION
-
-Use the established geospatial architecture.
-
-Candidate sources:
-
-• Nearby available drivers
-• Neighboring cells
-• Appropriate vehicle category
-• Active driver eligibility
-
-Filter by:
-
-• Driver state
-• Vehicle state
-• Service area
-• Accessibility
-• Passenger capacity
-• Current assignment state
-• Driver restrictions
-• Regulatory constraints
-
-Never broadcast a ride request to every nearby driver.
-
-────────────────────────────────────────
-
-MATCHING
-
-Implement an extensible matching engine.
-
-Separate:
-
-1. Candidate generation
-2. Hard eligibility
-3. ETA
-4. Scoring
-5. Offer strategy
-6. Driver response
-7. Reservation
-8. Assignment
-
-Scoring may consider:
-
-• Pickup ETA
-• Distance
-• Driver availability
-• Vehicle category
-• Accessibility
-• Trip direction
-• Driver preferences
-• Service requirements
-• Supply balancing
-• Configurable quality signals
-
-Do not hard-code one algorithm.
-
-────────────────────────────────────────
-
-MATCHING FAIRNESS
-
-Provide architecture for configurable fairness constraints.
-
-Consider:
-
-• Driver opportunity
-• Supply distribution
-• Service quality
-• Acceptance behavior
-• Regional requirements
-
-Matching should be operationally explainable.
-
-────────────────────────────────────────
-
-DRIVER OFFER
-
-Implement:
-
-• Offer creation
-• Offer delivery
-• Offer receipt
-• Offer viewed
-• Accept
-• Reject
-• Expire
-• Cancel
-
-Offer states:
-
-• Created
-• Sent
-• Delivered
-• Viewed
-• Accepted
-• Rejected
-• Expired
-• Canceled
-
-────────────────────────────────────────
-
-OFFER TIMEOUT
-
-Offer expiration must be server-authoritative.
+Implement an operational backend for inspecting and safely replaying dead-letter records.
 
 Support:
 
-• Configurable timeout
-• Region-specific policies
-• Vehicle-category policies
-• Retry
-• Reassignment
+* queue/job dead letters
+* Kafka/event dead letters
+* outbox failures
+* notification failures
+* search-index failures
 
-A late acceptance must return a deterministic result.
+Every replay operation must:
 
-────────────────────────────────────────
+* require authorization
+* record operator identity
+* preserve original failure metadata
+* re-check current authoritative state
+* be idempotent where applicable
+* create an audit record
 
-DUPLICATE OFFERS
+Do not provide an unrestricted "replay everything" operation.
 
-Prevent:
+---
 
-• Same request offered repeatedly unintentionally
-• Same driver receiving incompatible concurrent offers
-• Multiple drivers being assigned simultaneously
+# EVENT REPLAY
 
-Use:
+Implement a controlled event-replay abstraction.
 
-• Offer IDs
-• Idempotency keys
-• Short-lived reservation state
-• Atomic transitions
+Replay must support:
 
-────────────────────────────────────────
+* selected event IDs
+* selected event ranges
+* selected event types
+* selected aggregate/entity IDs where feasible
 
-DRIVER RESERVATION
+Before replaying:
 
-Before assignment, create a short-lived reservation/lease.
+* verify operator permissions
+* verify consumer compatibility
+* verify event schema version
+* prevent unsafe side effects
+* preserve correlation metadata
 
-Support:
+Replay of a financial event must never blindly execute a second financial side effect.
 
-• Reservation ID
-• Driver ID
-• Ride request ID
-• Expiration
-• Status
+Consumers must identify whether an event represents:
 
-Possible statuses:
+* informational analytics
+* derived index state
+* notification
+* financial command
 
-• Held
-• Confirmed
-• Released
-• Expired
+and apply appropriate safeguards.
 
-Do not reserve drivers indefinitely.
+---
 
-────────────────────────────────────────
+# OUTBOX MONITORING
 
-ASSIGNMENT CONSISTENCY
-
-The system must prevent:
-
-• One driver receiving two confirmed trips
-• Two drivers owning one trip
-• A canceled trip being assigned
-• A stale offer becoming assignment authority
-• A driver being assigned while ineligible
-
-Use database state transitions plus short-lived distributed coordination where appropriate.
-
-────────────────────────────────────────
-
-TRIP DOMAIN
-
-Implement:
-
-• Trip creation
-• Driver assignment
-• Driver en-route
-• Driver arrival
-• Trip start
-• Stop reached
-• Trip progress
-• Trip completion
-• Cancellation
-• Dispute state reference
-
-Trip states:
-
-• Requested
-• Searching
-• Assigned
-• Driver En Route
-• Driver Arrived
-• Trip Started
-• Trip In Progress
-• Stop Reached
-• Trip Completed
-• Rider Canceled
-• Driver Canceled
-• System Canceled
-• Disputed
-
-────────────────────────────────────────
-
-TRIP STATE MACHINE
-
-Define every valid transition.
-
-Examples:
-
-Requested
-→ Searching
-
-Searching
-→ Assigned
-→ Canceled
-→ Failed
-
-Assigned
-→ Driver En Route
-→ Rider Canceled
-→ Driver Canceled
-→ System Canceled
-
-Driver En Route
-→ Driver Arrived
-→ Driver Canceled
-→ Rider Canceled
-
-Driver Arrived
-→ Trip Started
-→ Rider Canceled
-→ Driver Canceled
-
-Trip Started
-→ Trip In Progress
-→ Stop Reached
-→ Trip Completed
-
-Trip In Progress
-→ Stop Reached
-→ Trip Completed
-→ Disputed
-
-No invalid transition may be accepted.
-
-────────────────────────────────────────
-
-TRIP STATE VERSIONING
-
-Implement optimistic concurrency.
-
-Every trip state mutation should support:
-
-• Expected version
-• Mutation ID
-• Actor
-• Timestamp
-
-Reject stale mutations.
-
-Do not silently overwrite newer state.
-
-────────────────────────────────────────
-
-TRIP EVENT HISTORY
-
-Record important transitions:
-
-• Previous state
-• New state
-• Actor
-• Timestamp
-• Reason
-• Request ID
-• Region
-• Mutation ID
-
-Trip event history must be auditable.
-
-────────────────────────────────────────
-
-DRIVER STATE DURING TRIP
-
-Integrate with driver availability.
-
-The driver transitions appropriately:
-
-Available
-→ Offered
-→ Assigned
-→ En Route
-→ Arrived
-→ On Trip
-→ Available
-
-Do not make availability and trip state one shared aggregate.
-
-Define synchronization rules.
-
-────────────────────────────────────────
-
-REAL-TIME TRIP STATE
-
-Publish trip updates through WebSockets.
-
-Support:
-
-• Driver status
-• Driver arrival
-• Trip start
-• Trip progress
-• Stop reached
-• Trip completion
-• Cancellation
-• ETA updates
-
-Authorize subscribers.
-
-────────────────────────────────────────
-
-RIDER TRACKING
-
-During an active trip, authorized riders may receive:
-
-• Driver location
-• Driver status
-• Vehicle
-• ETA
-• Route state
-• Trip status
-
-Access must expire after the trip according to privacy policy.
-
-────────────────────────────────────────
-
-DRIVER TRIP VIEW
-
-Drivers should receive:
-
-• Pickup
-• Destination
-• Stop sequence
-• Rider information permitted by policy
-• Trip state
-• Navigation context
-• Fare information according to driver policy
-
-Do not expose unnecessary personal data.
-
-────────────────────────────────────────
-
-SCHEDULED RIDES
-
-Implement:
-
-• Create scheduled ride
-• Update where allowed
-• Cancel
-• Reminder
-• Pre-dispatch
-• Driver assignment
-• Reassignment
-• Expiration
-
-States:
-
-• Scheduled
-• Preparing
-• Dispatching
-• Assigned
-• Active
-• Canceled
-• Expired
-• Failed
-
-Use background scheduling.
-
-────────────────────────────────────────
-
-SCHEDULED-RIDE DISPATCH
-
-Define:
-
-• Pre-dispatch window
-• Driver candidate preparation
-• Driver assignment strategy
-• Driver replacement
-• Rider notification
-• Failure handling
-
-Do not hold a driver from going online for an unlimited period.
-
-────────────────────────────────────────
-
-MULTI-STOP TRIPS
-
-Support:
-
-• Multiple stops
-• Stop sequence
-• Add stop
-• Remove stop
-• Reorder stop
-• Stop arrival
-• Stop completion
-
-Every mutation must be authorized and versioned.
-
-────────────────────────────────────────
-
-ROUTE UPDATES
-
-When stops change:
-
-• Recalculate route
-• Recalculate ETA
-• Recalculate fare when required
-• Update driver/rider views
-
-Use the approved maps and ETA abstractions.
-
-────────────────────────────────────────
-
-SHARED RIDES
-
-Implement architecture for shared trips.
-
-Support:
-
-• Multiple riders
-• Shared vehicle
-• Capacity
-• Pickup order
-• Dropoff order
-• Detour limits
-• Fare allocation
-• Trip participant state
-
-Keep shared-trip orchestration separate from the standard trip path where possible.
-
-────────────────────────────────────────
-
-SHARED-RIDE MATCHING
-
-Candidate matching should consider:
-
-• Existing route
-• Pickup detour
-• Dropoff detour
-• Vehicle capacity
-• Current trip state
-• Maximum allowed delay
-
-Reject candidates exceeding configured limits.
-
-────────────────────────────────────────
-
-AIRPORT TRIPS
-
-Integrate airport zones.
-
-Support:
-
-• Terminal
-• Pickup zone
-• Dropoff zone
-• Driver staging
-• Queue zone
-• Restricted zone
-
-Dispatch must respect airport-specific operational constraints.
-
-────────────────────────────────────────
-
-TRIP CANCELLATION
-
-Support:
-
-• Rider cancellation
-• Driver cancellation
-• System cancellation
-• Timeout
-• Safety cancellation
-
-Record:
-
-• Actor
-• Reason
-• Timestamp
-• Trip state
-• Financial implications reference
-
-Do not calculate final financial adjustments here if the payment/fare domain owns those calculations.
-
-────────────────────────────────────────
-
-DISPATCH FAILURE RECOVERY
-
-When dispatch fails:
-
-• Preserve ride request
-• Do not incorrectly cancel active trips
-• Rebuild candidate pool
-• Retry
-• Reassign dispatch ownership if needed
-
-A dispatch-worker failure must not imply a trip failure.
-
-────────────────────────────────────────
-
-TRIP RECOVERY
-
-When a service crashes:
-
-• Reload authoritative trip state
-• Reconstruct transient state
-• Resume appropriate processing
-• Avoid duplicate offers
-• Avoid duplicate transitions
-
-Use database state plus event history and idempotency.
-
-────────────────────────────────────────
-
-REDIS
-
-Use Redis for:
-
-• Dispatch partitions
-• Candidate pools
-• Driver reservations
-• Offer state
-• Dispatch coordination
-• Trip real-time state cache
-• WebSocket coordination
-• Idempotency
-
-Use TTL for transient state.
-
-Redis must never be authoritative for:
-
-• Trip history
-• Final trip state
-• Driver ownership
-• Financial outcomes
-
-────────────────────────────────────────
-
-DATABASE
-
-Implement Prisma models and migrations for:
-
-• RideRequest
-• RideRequestStop
-• DriverOffer
-• DriverOfferAttempt
-• DriverReservation
-• Trip
-• TripParticipant
-• TripStop
-• TripStateTransition
-• TripAssignment
-• ScheduledRide
-• SharedRide
-• SharedRideParticipant
-• DispatchRequest
-• DispatchAttempt
-• DispatchLease
-• AirportTripReference where appropriate
-
-Use:
-
-• Primary keys
-• Foreign keys
-• Composite indexes
-• Unique constraints
-• State constraints
-• Version fields
-• Timestamps
-• Region identifiers
-
-Partition high-growth trip/event tables where appropriate.
-
-────────────────────────────────────────
-
-DATABASE CONSISTENCY
-
-Use transactions for:
-
-• Ride creation
-• Assignment
-• Reservation confirmation
-• Trip-state transition
-• Cancellation
-• Stop-state changes
-
-Use optimistic concurrency.
-
-Use short-lived distributed coordination only for resources such as active driver reservations.
-
-────────────────────────────────────────
-
-EVENTS
-
-Publish:
-
-RIDE REQUEST
-
-• RideRequested
-• RideValidationFailed
-• RideSearchingStarted
-• RideSearchExpanded
-• RideMatched
-• RideAssignmentChanged
-• RideCanceled
-
-DRIVER OFFERS
-
-• DriverOfferCreated
-• DriverOfferSent
-• DriverOfferViewed
-• DriverOfferAccepted
-• DriverOfferRejected
-• DriverOfferExpired
-• DriverOfferCanceled
-
-TRIPS
-
-• TripCreated
-• DriverAssigned
-• DriverEnRoute
-• DriverArrived
-• TripStarted
-• TripStopReached
-• TripCompleted
-• TripCanceled
-• TripDisputed
-
-SCHEDULED
-
-• ScheduledRideCreated
-• ScheduledRidePreparing
-• ScheduledRideDispatchStarted
-• ScheduledRideAssigned
-• ScheduledRideCanceled
-• ScheduledRideExpired
-
-SHARED
-
-• SharedRideCreated
-• SharedRideParticipantAdded
-• SharedRideParticipantRemoved
-• SharedRideRouteUpdated
-
-Events must be:
-
-• Versioned
-• Idempotently consumable
-• Minimal
-• Region-aware where required
-
-────────────────────────────────────────
-
-BACKGROUND JOBS
-
-Implement queues for:
-
-• Offer expiration
-• Dispatch retry
-• Scheduled-ride preparation
-• Scheduled reminders
-• Driver reservation expiration
-• Trip-state reconciliation
-• Stale dispatch cleanup
-• Shared-ride recalculation
-• Trip-event archival
-
-Every job must support:
-
-• Retry
-• Exponential backoff
-• Timeout
-• Idempotency
-• Dead-letter handling
-• Metrics
-• Structured logs
-
-────────────────────────────────────────
-
-API
-
-Implement production-ready REST APIs.
-
-RIDE REQUESTS
-
-• Create ride request
-• Get ride request
-• Cancel ride request
-• Estimate route context
-• Get request state
-
-DISPATCH
-
-• Internal dispatch request
-• Candidate discovery
-• Driver offer creation
-• Assignment confirmation
-
-DRIVER OFFERS
-
-• List offers
-• Get offer
-• Accept offer
-• Reject offer
-
-TRIPS
-
-• Get trip
-• Get trip state
-• Cancel trip
-• Driver arrived
-• Start trip
-• Reach stop
-• Complete trip
-• Update trip state
-
-SCHEDULED
-
-• Create scheduled ride
-• Get scheduled ride
-• Update
-• Cancel
-
-SHARED RIDE
-
-• Create
-• Add participant
-• Remove participant
-• Get shared-trip state
-
-Every public API must support:
-
-• Authentication
-• Authorization
-• Validation
-• Rate limiting
-• Idempotency
-• Versioning
-• OpenAPI
-• Consistent errors
-
-Internal dispatch APIs must also enforce service authentication and authorization.
-
-────────────────────────────────────────
-
-REAL-TIME API
-
-Implement WebSocket events for:
-
-• Ride search status
-• Driver offer
-• Driver assignment
-• Driver location
-• ETA
-• Trip state
-• Stop state
-• Cancellation
-
-Clients may receive only data they are authorized to receive.
-
-────────────────────────────────────────
-
-SECURITY
-
-Protect against:
-
-• Fake ride requests
-• Request flooding
-• Offer manipulation
-• Offer replay
-• Assignment hijacking
-• Driver impersonation
-• Trip IDOR
-• Location leakage
-• Unauthorized trip cancellation
-• Stale-state replay
-• Duplicate state transitions
-
-Use:
-
-• Authentication
-• Authorization
-• Resource ownership
-• Rate limiting
-• Idempotency
-• Version checks
-• Audit
-
-────────────────────────────────────────
-
-OBSERVABILITY
-
-Instrument:
-
-• Ride requests
-• Dispatch
-• Candidate generation
-• Matching
-• Offers
-• Assignment
-• Trip-state transitions
-• Scheduled rides
-• Shared rides
-• WebSocket events
+Implement monitoring around the transactional outbox.
 
 Track:
 
-• Request-to-match latency
-• Candidate-generation latency
-• Match success rate
-• Offer delivery latency
-• Offer acceptance rate
-• Assignment conflict rate
-• Reassignment rate
-• Cancellation rate
-• Trip completion
-• State-transition failures
-• Dispatch queue depth
-• Regional capacity
+* backlog size
+* oldest unpublished event age
+* publish success
+* publish failure
+* retry count
+* dead-letter count
+* publishing throughput
 
-Define alerts for:
+Provide operational APIs/metrics sufficient to detect when event propagation is falling behind.
 
-• Matching degradation
-• Offer backlog
-• Assignment conflicts
-• High cancellation
-• Trip-state inconsistency
-• Region saturation
+---
 
-────────────────────────────────────────
+# EVENT CONSUMER MONITORING
 
-TESTING
+Track for important consumers:
 
-UNIT TESTS
+* consumer lag
+* processing latency
+* processing failures
+* retry count
+* dead letters
+* throughput
+* last successful processing timestamp
+
+Consumers that stop processing must become operationally visible.
+
+---
+
+# QUEUE OPERATIONS
+
+Provide operational controls for BullMQ workloads.
+
+Support controlled inspection of:
+
+* waiting jobs
+* active jobs
+* failed jobs
+* delayed jobs
+* completed jobs where retained
+
+Where operational replay is allowed:
+
+* require authorization
+* preserve job identity
+* prevent unintended duplicate effects
+* verify current domain state
+
+Do not create an administrative endpoint that permits arbitrary job payload modification.
+
+---
+
+# RECONCILIATION FRAMEWORK
+
+Create a reusable reconciliation framework for domains that already require it.
+
+At minimum support reconciliation around:
+
+* payments
+* refunds
+* payouts
+* trip/dispatch state
+* location state
+* notification delivery
+* search indexing
+* event propagation
+
+A reconciliation task must produce:
+
+* reconciliation run ID
+* domain
+* scope
+* start time
+* end time
+* records examined
+* discrepancies found
+* corrections applied
+* corrections rejected
+* unresolved discrepancies
+
+---
+
+# RECONCILIATION SAFETY
+
+Reconciliation must not become a hidden second business engine.
+
+The framework must:
+
+* compare authoritative sources
+* identify discrepancies
+* execute only explicitly approved correction rules
+* preserve audit history
+* support dry-run mode where appropriate
+* avoid destructive history rewriting
+
+Financial reconciliation must preserve existing financial records and use adjustments where corrections are necessary.
+
+---
+
+# DATA RETENTION
+
+Implement backend retention workflows according to defined domain policies.
+
+Potential data categories:
+
+* transient location
+* historical location
+* notification delivery history
+* logs
+* traces
+* analytics events
+* support attachments
+* safety metadata
+* risk signals
+* search documents
+* session records
+* idempotency records
+* audit records
+
+Retention must be explicit.
+
+Do not blindly delete records solely based on age.
+
+---
+
+# LOCATION RETENTION
+
+Treat exact historical location separately from operational live location.
+
+Implement:
+
+* TTL for ephemeral live location
+* controlled retention for historical trip location
+* deletion/anonymization where required
+* access controls
+* auditability
+
+Do not retain every high-frequency driver location indefinitely.
+
+---
+
+# ACCOUNT DELETION
+
+Implement the production account-deletion workflow.
+
+The workflow must:
+
+1. Authenticate the requesting user.
+2. Authorize ownership.
+3. Determine which data is deletable.
+4. Determine which data is legally/financially retained.
+5. Anonymize/delete eligible personal data.
+6. Invalidate active sessions where required.
+7. invalidate ephemeral caches.
+8. remove or anonymize search documents.
+9. enqueue asynchronous cleanup.
+10. preserve required audit/financial records.
+11. record completion state.
+
+Do not delete financial/audit records that must legally remain while still exposing unnecessary personal identifiers.
+
+---
+
+# ACCOUNT DELETION ASYNCHRONOUS PROCESSING
+
+Large deletion workflows must use background jobs.
+
+Jobs must be:
+
+* idempotent
+* resumable
+* observable
+* retryable
+* permission-aware
+
+A worker restart must not leave the account in an unknowable intermediate state.
+
+---
+
+# DATA EXPORT
+
+Where supported by the product/privacy model, implement a secure data-export workflow.
+
+The export must:
+
+* be requested by an authenticated user
+* include only authorized data
+* run asynchronously for large datasets
+* use private object storage
+* expire automatically
+* have access logging
+* prevent cross-user access
+
+Do not expose raw database dumps to users.
+
+---
+
+# PRIVACY DELETION FROM DERIVED SYSTEMS
+
+Account deletion must address derived data such as:
+
+* Redis keys
+* search indexes
+* notification preferences
+* analytics where personal identifiers exist
+* caches
+* derived views
+
+Use deletion/anonymization events and asynchronous processing.
+
+Do not assume deleting PostgreSQL records automatically removes derived data.
+
+---
+
+# CACHE INVALIDATION
+
+Implement or strengthen consistent cache invalidation for mutable entities.
+
+At minimum consider:
+
+* user profile
+* driver profile
+* vehicle state
+* pricing configuration
+* promotion configuration
+* operational configuration
+
+Cache invalidation must occur after the authoritative write succeeds.
+
+Do not invalidate before a transaction that later rolls back.
+
+Where transactionally reliable invalidation is required, use outbox/event-driven invalidation.
+
+---
+
+# FEATURE-FLAG BACKEND
+
+Implement a server-side feature-flag abstraction where the repository requires feature-controlled rollout.
+
+Flags must support:
+
+* identifier
+* default
+* environment
+* activation state
+* target scope
+* rollout rules where needed
+* audit
+* expiration/cleanup metadata
+
+Feature evaluation must be deterministic.
+
+Critical security and financial invariants must not depend solely on mutable feature flags.
+
+---
+
+# OPERATIONAL CONFIGURATION
+
+Implement configuration entities for business-operational values such as:
+
+* market availability
+* ride-product availability
+* pricing settings
+* cancellation rules
+* service zones
+* rate limits
+* notification settings
+* feature controls
+* safety settings
+
+Configuration changes must support:
+
+* validation
+* authorization
+* versioning
+* activation
+* rollback
+* audit
+
+---
+
+# CONFIGURATION VERSIONING
+
+When configuration affects a historical business decision, preserve the configuration version/reference used at decision time.
+
+Do not allow changing a configuration record to silently change the meaning of an old ride estimate or financial calculation.
+
+---
+
+# CONFIGURATION ROLLBACK
+
+Implement controlled rollback where configuration changes materially affect operations.
+
+A rollback must:
+
+* restore a previously validated configuration
+* create an audit record
+* preserve the history
+* invalidate relevant caches
+* propagate changes to derived services
+
+---
+
+# ADMINISTRATIVE SEARCH SECURITY
+
+Administrative search must enforce data classification.
+
+For example:
+
+* ordinary support users receive minimal rider information
+* privileged financial users receive financial records needed for authorized workflows
+* safety investigators receive safety data under explicit permissions
+* risk investigators receive risk signals according to permission
+* unrestricted historical location is not exposed by default
+
+Search field visibility must be permission-aware.
+
+---
+
+# AUDIT RETENTION
+
+Audit records for:
+
+* authentication security
+* administrative actions
+* financial corrections
+* compliance decisions
+* safety actions
+* data deletion
+* privacy access
+* risk enforcement
+
+must have defined retention.
+
+Do not silently purge critical audit evidence.
+
+---
+
+# SECURITY EVENT PROCESSING
+
+Create or extend security events for:
+
+* suspicious authentication
+* repeated login failures
+* privilege changes
+* session revocation
+* administrative access
+* unusual data export
+* excessive location access
+* repeated payment failures
+* suspicious payout changes
+
+Security events must be observable and auditable.
+
+---
+
+# API SECURITY HARDENING
+
+Review all backend APIs for:
+
+* authentication
+* authorization
+* resource ownership
+* rate limiting
+* pagination
+* input validation
+* output filtering
+* request-size controls
+* error handling
+* CORS
+* security headers
+
+Pay particular attention to:
+
+* list endpoints
+* search endpoints
+* export endpoints
+* administrative APIs
+* support APIs
+* financial endpoints
+
+---
+
+# MASS-ASSIGNMENT PROTECTION
+
+Ensure request DTOs cannot directly set privileged/internal fields such as:
+
+* account status
+* role
+* permissions
+* compliance approval
+* payment state
+* payout state
+* trip state
+* administrative flags
+
+Use explicit DTOs and command models.
+
+Do not bind arbitrary request objects directly into Prisma update operations.
+
+---
+
+# SQL AND QUERY SAFETY
+
+Review raw SQL usage.
+
+Every raw query must:
+
+* parameterize user input
+* use controlled identifiers
+* avoid dynamic SQL from untrusted data
+* have a clear reason for existing
+
+Do not accept arbitrary SQL expressions through API parameters.
+
+---
+
+# DATABASE PERFORMANCE HARDENING
+
+Review production query paths for:
+
+* N+1 patterns
+* missing indexes
+* unbounded queries
+* inefficient joins
+* hot rows
+* excessive transactions
+* oversized selected columns
+* poor pagination
+* unnecessary serialization
+
+Use query plans where practical.
+
+Add indexes only where justified by actual access patterns.
+
+Do not create redundant indexes that unnecessarily increase write cost.
+
+---
+
+# DATABASE CONNECTION MANAGEMENT
+
+Verify:
+
+* connection pool sizing
+* worker-specific connection behavior
+* request concurrency
+* background job concurrency
+* transaction duration
+* shutdown handling
+
+Do not allow worker scaling to overwhelm PostgreSQL with uncontrolled connections.
+
+---
+
+# REDIS PERFORMANCE HARDENING
+
+Review:
+
+* key cardinality
+* TTL coverage
+* hot keys
+* large values
+* serialization size
+* command patterns
+* geographic lookup load
+* rate-limit load
+
+Avoid:
+
+* giant Redis values
+* permanent keys
+* unbounded lists/sets
+* global locks with high contention
+
+---
+
+# EVENT PERFORMANCE HARDENING
+
+Review Kafka usage for:
+
+* partition balance
+* consumer concurrency
+* message size
+* topic retention
+* consumer lag
+* hot partitions
+* retry behavior
+* dead-letter behavior
+
+Do not create globally ordered topics when entity-level ordering is sufficient.
+
+---
+
+# QUEUE PERFORMANCE HARDENING
+
+Review BullMQ workloads for:
+
+* concurrency
+* retry amplification
+* job payload size
+* delayed-job volume
+* queue starvation
+* dead-letter growth
+* worker resource consumption
+
+Separate critical and noncritical workloads.
+
+---
+
+# BACKPRESSURE
+
+Implement or strengthen backpressure for:
+
+* location ingestion
+* notification generation
+* analytics ingestion
+* event consumers
+* search indexing
+* reconciliation
+* bulk exports
+
+The system must fail predictably under overload.
+
+---
+
+# GRACEFUL DEGRADATION
+
+Validate that failure of:
+
+* search
+* analytics
+* notification providers
+* risk analysis
+* noncritical configuration services
+
+does not unnecessarily stop:
+
+* active trips
+* authoritative ride state
+* financial correctness
+* emergency incident creation
+
+---
+
+# DISASTER RECOVERY BACKEND SUPPORT
+
+Implement the backend-side mechanisms needed for recovery.
+
+Support:
+
+* replayable events
+* rebuildable search indexes
+* reconstructible caches
+* recoverable queue jobs
+* reconciliation
+* database backup verification hooks
+* idempotent startup/reprocessing
+
+Do not depend on ephemeral state being preserved through a disaster.
+
+---
+
+# RECOVERY FROM REDIS LOSS
+
+Ensure that after Redis data loss:
+
+* authoritative PostgreSQL records remain valid
+* caches can be rebuilt
+* ephemeral driver/location state can recover from active clients
+* active-trip authoritative state remains available
+* rate-limit state can safely reset according to defined policy
+* distributed ephemeral state does not become permanent corruption
+
+---
+
+# RECOVERY FROM KAFKA LOSS OR REBUILD
+
+Ensure event-driven derived systems can be reconstructed from authoritative state or durable event history.
+
+Where a downstream consumer depends on a Kafka topic, define:
+
+* replay strategy
+* initial synchronization
+* schema compatibility
+* duplicate handling
+
+---
+
+# RECOVERY FROM SEARCH LOSS
+
+Search indexes must be rebuildable.
+
+The loss of search must not destroy:
+
+* users
+* trips
+* payments
+* payouts
+* support cases
+
+Transactional APIs remain authoritative.
+
+---
+
+# RECOVERY FROM QUEUE LOSS
+
+Critical asynchronous work must have enough durable source state to be regenerated or reconciled.
+
+Do not rely solely on an ephemeral queue entry as proof that critical work should happen.
+
+---
+
+# OBSERVABILITY HARDENING
+
+Ensure tracing crosses:
+
+* HTTP
+* PostgreSQL
+* Redis
+* BullMQ
+* Kafka
+* WebSockets
+* external providers
+
+Every asynchronous boundary should preserve correlation context.
+
+---
+
+# TRACE SAMPLING
+
+High-volume paths such as driver location must not produce unbounded telemetry volume.
+
+Use appropriate sampling while preserving:
+
+* errors
+* slow operations
+* important business transactions
+* security-sensitive operations
+
+Do not sample away every trace needed for incident investigation.
+
+---
+
+# LOGGING HARDENING
+
+Review logs for:
+
+* secrets
+* tokens
+* passwords
+* payment credentials
+* exact location
+* private support content
+* raw compliance documents
+* raw risk signals
+
+Implement redaction centrally where possible.
+
+---
+
+# ALERTING SIGNALS
+
+Create or document alerts for:
+
+* API error spikes
+* dispatch backlog
+* stale driver location
+* payment failures
+* payout failures
+* webhook backlog
+* Kafka consumer lag
+* outbox lag
+* queue backlog
+* dead letters
+* database saturation
+* Redis failures
+* WebSocket degradation
+* search indexing failures
+* reconciliation discrepancies
+* unusual safety events
+* suspicious risk spikes
+
+Alerts must be actionable.
+
+---
+
+# SLO SUPPORT
+
+Expose metrics necessary to evaluate SLOs for:
+
+* API availability
+* ride request success
+* dispatch latency
+* realtime delivery
+* payment processing
+* payout processing
+* notification delivery
+* location ingestion
+
+Do not create an SLO that cannot be measured reliably.
+
+---
+
+# OPERATIONAL RUNBOOK DATA
+
+Backend APIs/metrics should expose enough information to execute operational runbooks.
+
+Operators should be able to determine:
+
+* what failed
+* when it failed
+* affected domain
+* affected region/market
+* current backlog
+* last successful processing
+* safe recovery action
+
+Do not expose operational mutation endpoints to ordinary users.
+
+---
+
+# DATA QUALITY
+
+Implement validation/monitoring for:
+
+* impossible state combinations
+* orphaned records
+* missing foreign relationships
+* duplicate financial references
+* stale driver state
+* invalid pricing configuration
+* orphaned search documents
+* out-of-date aggregates
+
+Data-quality checks must be observable.
+
+---
+
+# DATA INTEGRITY RECONCILIATION
+
+Implement periodic checks for invariants such as:
+
+* active rides have valid lifecycle states
+* assignments map to valid trips
+* drivers do not hold contradictory active assignments
+* payments map to valid financial references
+* payouts map to valid earnings
+* promotions do not exceed usage rules
+* ratings reference valid completed trips
+
+Detected violations must produce alerts and safe investigation records.
+
+Do not silently "fix" data without a documented correction pathway.
+
+---
+
+# BULK OPERATIONS
+
+Administrative bulk operations must be carefully bounded.
+
+Examples:
+
+* suspend a set of accounts
+* reindex a set of records
+* reprocess a bounded event range
+* migrate configuration
+
+Every bulk operation must support:
+
+* authorization
+* explicit scope
+* bounded batch size
+* progress
+* cancellation
+* audit
+* idempotency
+* failure reporting
+
+Never provide unrestricted arbitrary bulk SQL through an API.
+
+---
+
+# DATA EXPORT SAFETY
+
+Exports must:
+
+* enforce authorization
+* limit data scope
+* run asynchronously
+* expire
+* encrypt at rest
+* use private storage
+* create access audits
+* prevent predictable URLs
+
+Do not place exports in public object storage.
+
+---
+
+# BACKEND-WIDE SECURITY REVIEW
+
+Perform a complete review covering:
+
+* authentication
+* authorization
+* IDOR
+* mass assignment
+* SQL injection
+* SSRF boundaries
+* webhook security
+* file access
+* rate limiting
+* token handling
+* admin authorization
+* support authorization
+* privacy controls
+* location protection
+* payment security
+* payout security
+* audit protection
+* secret handling
+
+Fix issues discovered within scope.
+
+---
+
+# BACKEND-WIDE RELIABILITY REVIEW
+
+Verify:
+
+* graceful shutdown
+* retry bounds
+* idempotency
+* transaction boundaries
+* outbox recovery
+* queue recovery
+* Kafka replay
+* search rebuild
+* cache rebuild
+* reconciliation
+* provider timeouts
+* dependency isolation
+* overload protection
+
+---
+
+# TESTING REQUIREMENTS
+
+Add comprehensive tests.
+
+## ANALYTICS
 
 Test:
 
-• Ride-request validation
-• Matching filters
-• Matching scoring
-• Offer state machine
-• Reservation state
-• Trip state machine
-• Scheduled-ride transitions
-• Multi-stop rules
-• Shared-ride rules
-• Cancellation rules
+* event ingestion
+* deduplication
+* event replay
+* aggregation
+* event-time handling
 
-INTEGRATION TESTS
+## SEARCH
 
 Test:
 
-• PostgreSQL
-• PostGIS
-• Redis
-• Kafka
-• BullMQ
-• WebSockets
-• Maps integration
+* indexing
+* update
+* deletion
+* eventual consistency
+* reindex
+* permission filtering
 
-CONCURRENCY TESTS
-
-Test:
-
-• Two drivers accept one offer
-• One driver accepts two trips
-• Duplicate offer response
-• Late offer acceptance
-• Concurrent cancellation
-• Concurrent trip-state mutations
-• Scheduled dispatch race
-• Multi-stop edits
-
-RECOVERY TESTS
+## RECONCILIATION
 
 Test:
 
-• Dispatch-worker crash
-• Redis restart
-• Kafka interruption
-• Database failover
-• WebSocket disconnect
-• Region failover
+* discrepancy detection
+* dry-run
+* safe correction
+* audit
+* idempotent rerun
 
-PERFORMANCE TESTS
-
-Test:
-
-• Ride-request throughput
-• Candidate generation
-• Matching throughput
-• Offer throughput
-• Assignment latency
-• Active trip count
-• WebSocket traffic
-
-SECURITY TESTS
+## PRIVACY
 
 Test:
 
-• Trip IDOR
-• Driver impersonation
-• Unauthorized cancellation
-• Offer replay
-• Assignment hijacking
-• WebSocket authorization
+* account deletion
+* anonymization
+* session invalidation
+* cache cleanup
+* search cleanup
+* data export authorization
+* export expiration
 
-────────────────────────────────────────
+## ADMINISTRATION
 
-DOCUMENTATION
+Test:
 
-Generate:
+* permission checks
+* bulk operation boundaries
+* replay permissions
+* dead-letter permissions
+* configuration changes
+* audit
 
-• Ride-request architecture
-• Dispatch architecture
-• Dispatch partitioning
-• Matching architecture
-• Matching constraints
-• Driver-offer lifecycle
-• Reservation/lease architecture
-• Trip state machine
-• Scheduled-ride architecture
-• Multi-stop architecture
-• Shared-ride architecture
-• Airport integration
-• Real-time trip-state architecture
-• Recovery architecture
-• API contracts
-• WebSocket contracts
-• Event contracts
-• Queue definitions
-• Database schema
-• Redis key catalog
-• Security model
-• Testing strategy
+## RESILIENCE
 
-────────────────────────────────────────
+Test:
 
-PROJECT INDEX
+* Redis loss
+* Kafka consumer restart
+* queue failure
+* search failure
+* provider outage
+* duplicate event
+* worker restart
+* database reconnect
 
-Update the backend Project Index with:
+---
 
-• Ride-request modules
-• Dispatch modules
-• Matching modules
-• Driver-offer modules
-• Reservation modules
-• Trip modules
-• Trip-state machine
-• Scheduled-ride modules
-• Multi-stop modules
-• Shared-ride modules
-• Airport integration
-• WebSocket trip streams
-• Database objects
-• Migrations
-• Redis keys
-• API endpoints
-• WebSocket events
-• Kafka topics
-• BullMQ queues
-• Workers
-• Tests
-• Observability
-• Security controls
-• Generated files
-• Remaining work
-• Current milestone
-• Dependencies
+# CONCURRENT TESTING
 
-────────────────────────────────────────
+Verify correctness under:
 
-IMPLEMENTATION MILESTONES
+* concurrent reconciliation
+* repeated event replay
+* simultaneous administrative actions
+* duplicate export requests
+* concurrent configuration updates
+* reindexing while records are changing
+* cache invalidation races
+* queue retry races
 
-BACKEND MILESTONE 31
+---
 
-Ride requests, validation, request state machine, ride categories, pickup/dropoff normalization, and APIs.
+# INTEGRATION TESTING
 
-BACKEND MILESTONE 32
+Use realistic infrastructure where practical.
 
-Dispatch partitions, candidate generation, spatial expansion, eligibility filtering, and dispatch orchestration.
+Validate:
 
-BACKEND MILESTONE 33
+* PostgreSQL
+* Redis
+* Kafka/outbox
+* BullMQ
+* search
+* object storage
+* existing provider abstractions
+* observability integrations
 
-Matching engine, scoring abstractions, fairness controls, ETA integration, and matching recovery.
+Do not claim integration coverage when infrastructure was not actually exercised.
 
-BACKEND MILESTONE 34
+---
 
-Driver offers, offer lifecycle, timeout, retries, reservations, leases, and assignment consistency.
+# PERFORMANCE VALIDATION
 
-BACKEND MILESTONE 35
+Measure, where practical:
 
-Trip aggregate, trip state machine, optimistic concurrency, trip-event history, and trip APIs.
+* administrative search
+* analytics consumers
+* event throughput
+* queue throughput
+* reconciliation throughput
+* account deletion throughput
+* export throughput
+* database query latency
+* Redis operations
+* Kafka consumer lag
 
-BACKEND MILESTONE 36
+Identify bottlenecks and document the observed limits.
 
-Real-time trip-state WebSockets, rider tracking, driver trip state, disconnect/reconnect handling, and fan-out.
+---
 
-BACKEND MILESTONE 37
+# MIGRATION VALIDATION
 
-Scheduled rides, pre-dispatch, reminders, assignment, reassignment, expiration, and reconciliation.
+Every schema change must:
 
-BACKEND MILESTONE 38
+* apply cleanly
+* preserve required data
+* preserve financial precision
+* preserve auditability
+* preserve indexes
+* support rolling deployment where required
 
-Multi-stop trips, route updates, ETA recalculation, fare-recalculation integration, and stop state.
+Do not use destructive migration shortcuts on production data.
 
-BACKEND MILESTONE 39
+---
 
-Shared rides, airport integrations, Redis optimization, events, queues, recovery, and observability.
+# API CONTRACT VALIDATION
 
-BACKEND MILESTONE 40
+Review existing APIs for:
 
-Concurrency, dispatch, trip-state, WebSocket, performance, resilience, security, and production-hardening tests.
+* pagination
+* authorization
+* output filtering
+* error semantics
+* rate limits
+* sensitive fields
+* backwards compatibility
 
-Each milestone should contain approximately 20–40 files where practical.
+Do not expose newly added operational fields through ordinary client APIs unintentionally.
 
-Every milestone must compile before proceeding.
+---
 
-────────────────────────────────────────
+# DOCUMENTATION
 
-OUTPUT FORMAT
+Update documentation for:
 
-For every generated file provide:
+* analytics
+* search
+* replay
+* dead letters
+* reconciliation
+* privacy deletion
+* data export
+* operational configuration
+* feature flags
+* recovery
+* data retention
+* backend security
+* performance considerations
 
-1. Exact file path
-2. Complete file contents
+Documentation must describe real implementation and operational behavior.
 
-Never truncate code.
+---
 
-Never summarize source code instead of generating it.
+# IMPLEMENTATION DISCIPLINE
 
-Never generate pseudo-code.
+Before changing files:
 
-Never generate placeholders.
+1. Inspect the repository.
+2. Map existing operational infrastructure.
+3. Preserve compatible implementation.
+4. Implement analytics ingestion.
+5. Implement operational search.
+6. Implement reconciliation framework.
+7. Implement privacy workflows.
+8. Implement data retention.
+9. Implement controlled replay and dead-letter operations.
+10. Implement operational configuration.
+11. Harden cache/index/event processing.
+12. Harden APIs and database performance.
+13. Add observability improvements.
+14. Add resilience controls.
+15. Add comprehensive tests.
+16. Validate migrations.
+17. Run formatting/linting/type checks.
+18. Run integration/runtime validation.
+19. Perform backend-wide security/reliability review.
+20. Update documentation.
+21. Produce the required completion report.
 
-Never generate TODO implementations.
+Do not rewrite unrelated features.
 
-When modifying an existing file:
+---
 
-1. Provide the exact file path.
-2. State why it must change.
-3. Provide the complete updated file.
+# PRODUCTION COMPLETENESS
 
-Never regenerate unchanged files.
+Never leave:
 
-────────────────────────────────────────
+* fake analytics
+* fake reconciliation
+* unrestricted admin queries
+* placeholder deletion logic
+* irreversible replay operations
+* unaudited administrative mutations
+* unbounded export functionality
+* undocumented configuration changes
+* unsafe bulk operations
+* TODO/FIXME implementation gaps
+* pseudo-code
 
-SCOPE RESTRICTION
+Do not claim operational readiness if reconciliation cannot safely detect or report discrepancies.
 
-This volume covers:
+---
 
-• Ride requests
-• Ride-request validation
-• Dispatch
-• Dispatch partitioning
-• Candidate generation
-• Matching
-• Matching scoring
-• Matching fairness
-• Driver offers
-• Offer lifecycle
-• Driver reservations
-• Assignment
-• Trip lifecycle
-• Trip state machine
-• Trip-event history
-• Real-time trip state
-• Scheduled rides
-• Multi-stop trips
-• Shared rides
-• Airport-trip integration
-• Dispatch recovery
-• Assignment consistency
+# PROHIBITED PRACTICES
 
-Do not implement complete:
+Never:
 
-• Pricing
-• Surge
-• Promotions
-• Payments
-• Wallets
-• Earnings
-• Payouts
-• Ratings
-• Messaging business logic
-• Notifications business logic
-• Safety
-• Fraud
-• Support
-• Business accounts
-• Analytics platform
-• Administration UI
-• Infrastructure
-• Frontend
-• Mobile
+* query production transactional tables for arbitrary analytics
+* expose raw SQL administration
+* replay financial events without safeguards
+* permanently store high-frequency location without policy
+* delete required financial/audit records
+* expose private exports publicly
+* permit support users to bypass domain authorization
+* use search as authoritative state
+* use analytics as authoritative state
+* use feature flags to bypass authorization
+* let a failed derived system corrupt transactional truth
+* silently repair inconsistent data
+* create infinite retry loops
+* allow unbounded bulk operations
+* expose secrets in operational tooling
 
-Those belong to later implementation volumes.
+---
 
-────────────────────────────────────────
+# IMPLEMENTATION BOUNDARIES
 
-QUALITY BAR
+This volume completes the backend operational and production-hardening layer.
 
-Treat dispatch, matching, assignment, and trip state as mission-critical systems.
+It must integrate with all previously implemented domains without creating alternate versions.
 
-Assume:
+Do not implement:
 
-• Millions of online drivers
-• Millions of active trips
-• Large ride-request bursts
-• Tens of millions of concurrent client connections
-• Regional dispatch
-• High location update volume
-• Very low matching latency
-• Strict trip consistency
+* frontend
+* mobile UI
+* cloud infrastructure deployment
 
-Prioritize:
+unless a minimal repository integration change is required for backend functionality.
 
-• Low dispatch latency
-• Correct assignment
-• Strong trip-state correctness
-• Idempotency
-• Concurrency safety
-• Regional isolation
-• Graceful recovery
-• Horizontal scalability
-• Real-time reliability
-• Observability
-• Security
-• Production readiness
+Do not redesign the core ride, trip, payment, or identity domains.
+
+---
+
+# REQUIRED IMPLEMENTATION DELIVERABLES
+
+Implement or update:
+
+## ANALYTICS
+
+* event consumers
+* business metrics
+* aggregation
+* analytics persistence/transport where required
+
+## SEARCH
+
+* index management
+* indexing consumers
+* permission-aware search
+* rebuild/reindex
+
+## RECONCILIATION
+
+* reusable framework
+* domain reconciliation jobs
+* discrepancy tracking
+* safe correction
+
+## PRIVACY
+
+* account deletion
+* anonymization
+* data export
+* derived-system cleanup
+
+## OPERATIONS
+
+* dead-letter inspection
+* controlled replay
+* queue operations
+* outbox monitoring
+* configuration management
+* feature flags where applicable
+
+## DATA LIFECYCLE
+
+* retention
+* cleanup
+* cache invalidation
+* derived-data cleanup
+
+## HARDENING
+
+* API security
+* database performance
+* Redis performance
+* event performance
+* queue performance
+* backpressure
+* resilience
+
+## OBSERVABILITY
+
+* operational metrics
+* lag metrics
+* reconciliation metrics
+* audit telemetry
+* recovery metrics
+
+---
+
+# REQUIRED OPERATIONAL APIs
+
+Implement appropriately authorized APIs or internal administrative mechanisms for:
+
+* business metrics
+* operational search
+* dead-letter inspection
+* controlled replay
+* reconciliation status
+* reconciliation execution
+* queue inspection
+* configuration
+* feature flags where applicable
+* data-export status
+* privacy deletion status
+
+Do not expose internal operational controls to riders or drivers.
+
+---
+
+# REQUIRED DATABASE VALIDATION
+
+After implementation:
+
+* apply migrations
+* inspect query plans for important new queries
+* verify indexes
+* verify retention constraints
+* verify deletion/anonymization behavior
+* verify audit relationships
+* verify reconciliation records
+* verify export records
+* verify configuration versioning
+
+---
+
+# RUNTIME VALIDATION
+
+Verify:
+
+* analytics consumers
+* search indexing
+* search rebuild
+* reconciliation
+* dead-letter operations
+* event replay safeguards
+* queue operations
+* account deletion
+* data export
+* cache invalidation
+* configuration changes
+* feature flags
+* observability
+* graceful degradation
+
+Do not report a recovery workflow as implemented unless it was actually exercised.
+
+---
+
+# COMPLETION REPORT REQUIREMENTS
+
+When implementation is complete, report:
+
+## FILES CREATED
+
+List every new file.
+
+## FILES MODIFIED
+
+List every modified file.
+
+## ANALYTICS
+
+Report:
+
+* event consumers
+* aggregates
+* metrics
+* deduplication
+* replay behavior
+
+## SEARCH
+
+Report:
+
+* indexes
+* indexing consumers
+* permissions
+* reindexing
+* rebuild strategy
+
+## RECONCILIATION
+
+Report:
+
+* domains covered
+* discrepancy types
+* corrections
+* audit behavior
+* dry-run behavior
+
+## PRIVACY
+
+Report:
+
+* deletion
+* anonymization
+* export
+* cache cleanup
+* search cleanup
+
+## OPERATIONS
+
+Report:
+
+* dead-letter tooling
+* replay
+* queue controls
+* outbox monitoring
+* configuration
+* feature flags
+
+## DATABASE
+
+Report:
+
+* schema changes
+* indexes
+* performance changes
+* retention support
+
+## SECURITY
+
+Report:
+
+* API hardening
+* admin controls
+* bulk-operation controls
+* privacy authorization
+* export security
+
+## OBSERVABILITY
+
+Report:
+
+* logs
+* metrics
+* traces
+* alerts
+* lag monitoring
+* reconciliation telemetry
+
+## TESTS
+
+List tests added or modified and the behaviors they verify.
+
+## VALIDATION
+
+Report:
+
+* formatting
+* linting
+* type checking
+* builds
+* migrations
+* unit tests
+* integration tests
+* resilience tests
+* performance tests
+* operational-workflow validation
+
+## COMPATIBILITY
+
+Identify:
+
+* API compatibility
+* database compatibility
+* event compatibility
+* operational migration considerations
+
+## UNRESOLVED ISSUES
+
+List only genuine remaining issues.
+
+Do not claim production readiness if required operational controls or recovery behavior remain incomplete or unverified.
+
+---
+
+# FINAL ENGINEERING PRINCIPLE
+
+The backend must not merely execute successful requests; it must remain understandable, recoverable, auditable, and operationally controllable when the system is under stress or partially failing.
+
+The final backend layer must provide:
+
+* observable business behavior
+* safe operational tooling
+* rebuildable derived systems
+* controlled data lifecycle
+* privacy-preserving deletion
+* secure data export
+* recoverable asynchronous processing
+* reliable reconciliation
+* bounded bulk operations
+* measurable SLO support
+* hardened persistence
+* resilient event and queue infrastructure
+
+Transactional systems remain authoritative.
+
+Analytics, search, caches, queues, and derived stores remain reconstructible.
+
+Administrative operations remain authorized and audited.
+
+Privacy operations remain compatible with financial and audit retention.
+
+Recovery operations remain idempotent and bounded.
+
+The repository remains the implementation source of truth.
+
+All subsequent client and infrastructure work must consume the completed backend through stable APIs, events, and operational contracts without introducing alternate backend behavior.
